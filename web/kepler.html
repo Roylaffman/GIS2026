@@ -13,13 +13,13 @@
 <div id="app" style="height:100%"></div>
 <div id="err"></div>
 
-<script src="config.js"></script>
-<script src="lib/react.production.min.js"></script>
-<script src="lib/react-dom.production.min.js"></script>
-<script src="lib/redux.min.js"></script>
-<script src="lib/react-redux.min.js"></script>
-<script src="lib/styled-components.min.js"></script>
-<script src="lib/keplergl.min.js"></script>
+<script src="/config.js"></script>
+<script src="/lib/react.production.min.js"></script>
+<script src="/lib/react-dom.production.min.js"></script>
+<script src="/lib/redux.min.js"></script>
+<script src="/lib/react-redux.min.js"></script>
+<script src="/lib/styled-components.min.js"></script>
+<script src="/lib/keplergl.min.js"></script>
 <script>
 (function () {
   function showError(msg) {
@@ -60,8 +60,14 @@
       )
     );
 
+    // ---- resolve run: /kepler.html?run=<slug> ------------------------------
+    const params = new URLSearchParams(window.location.search);
+    const run = params.get('run');
+    const dataRoot = run ? ('/runs/' + run + '/') : './';
+    const label = run || 'Mount Mitchell';
+
     // ---- auto-load pois.geojson ------------------------------------------
-    fetch('pois.geojson').then(r => {
+    fetch(dataRoot + 'pois.geojson').then(r => {
       if (!r.ok) throw new Error('pois.geojson HTTP ' + r.status);
       return r.json();
     }).then(fc => {
@@ -81,7 +87,7 @@
       });
       store.dispatch(addDataToMap({
         datasets: {
-          info: { label: 'Mount Mitchell POIs', id: 'pois' },
+          info: { label: label + ' POIs', id: 'pois' },
           data: { fields, rows }
         },
         options: { centerMap: true, readOnly: false }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>DSHarnessGIS — Quick Maps Hub</title>
+<style>
+  body{font:14px/1.6 Segoe UI,sans-serif;margin:0;background:#f6f7f9;color:#222}
+  header{background:#1a2a3a;color:#fff;padding:18px 28px}
+  header h1{margin:0;font-size:20px}
+  header p{margin:4px 0 0;opacity:.85;font-size:13px}
+  main{max-width:900px;margin:22px auto;padding:0 16px}
+  .run{background:#fff;border:1px solid #e0e3e8;border-radius:10px;padding:14px 18px;margin-bottom:14px;
+       box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .run h2{margin:0 0 2px;font-size:17px}
+  .run .meta{color:#666;font-size:12.5px;margin-bottom:8px}
+  .run a{display:inline-block;margin:3px 10px 0 0;padding:6px 14px;border-radius:6px;text-decoration:none;
+         font-weight:600;font-size:13px}
+  .deck{background:#1565c0;color:#fff}
+  .kep{background:#2e7d32;color:#fff}
+  .run a:hover{filter:brightness(1.1)}
+  #empty{display:none;background:#fff;border:1px dashed #ccc;border-radius:10px;padding:30px;text-align:center;color:#777}
+  code{background:#eef1f4;padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>&#9962; DSHarnessGIS — Quick Maps</h1>
+  <p>OpenTopo DEM + SerpAPI POIs + H3 + DuckDB &rarr; Deck.gl / Kepler.gl.
+     Make a new one: <code>python quickmap.py "Place Name" --pois serpapi --query "hiking trails"</code></p>
+  <p style="opacity:.7;font-size:12.5px;margin-top:6px">Root demo (not a run): <a style="color:#8ec5ff" href="index.html">Mount Mitchell Leaflet</a> ·
+     <a style="color:#8ec5ff" href="deck.html">Deck.gl</a> · <a style="color:#8ec5ff" href="kepler.html">Kepler.gl</a></p>
+</header>
+<main id="list">
+  <div id="empty">No runs yet. Create one with quickmap.py</div>
+</main>
+<script>
+fetch('runs/index.json').then(r => r.ok ? r.json() : null).catch(() => null).then(idx => {
+  const list = document.getElementById('list');
+  if (!idx || !idx.runs || !idx.runs.length) return;
+  document.getElementById('empty').style.display = 'none';
+  for (const run of idx.runs) {
+    const div = document.createElement('div');
+    div.className = 'run';
+    const when = run.created ? run.created.slice(0, 16).replace('T', ' ') : '';
+    const query = run.query ? ` &middot; query: <i>${run.query}</i>` : '';
+    const display = run.display_name ? `<span class="meta">${escapeHtml(run.display_name)}</span>` : '';
+    div.innerHTML =
+      `<h2>&#128205; ${escapeHtml(run.title || run.slug)}</h2>` +
+      `<div class="meta">${when}${query}</div>${display}` +
+      `<a class="deck" href="deck.html?run=${encodeURIComponent(run.slug)}">Deck.gl map</a>` +
+      `<a class="kep" href="kepler.html?run=${encodeURIComponent(run.slug)}">Kepler.gl explore</a>`;
+    list.appendChild(div);
+  }
+});
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>

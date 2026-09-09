@@ -6,8 +6,10 @@ const fs = require("fs");
 const path = require("path");
 
 const WEB = path.join(__dirname, "..", "web");
+const runParam = process.argv[2] || "";
+const pageUrl = "http://127.0.0.1:8090/kepler.html" + (runParam ? "?run=" + runParam : "");
 const dom = new JSDOM("<!DOCTYPE html><html><body><div id='app'></div><div id='err'></div></body></html>", {
-  url: "http://127.0.0.1:8090/kepler.html",
+  url: pageUrl,
   pretendToBeVisual: true,
   runScripts: "outside-only",
 });
@@ -15,11 +17,15 @@ const { window } = dom;
 
 // Minimal globals the UMD bundles expect
 window.fetch = (url) => {
-  const p = path.join(WEB, String(url).split("/").pop());
+  // serve local web/ files (handle /runs/<slug>/... and root paths)
+  let rel = String(url);
+  if (rel.startsWith("/")) rel = rel.slice(1);
+  const p = path.join(WEB, rel);
   if (fs.existsSync(p)) {
+    const isJson = p.endsWith(".json") || p.endsWith(".geojson");
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve(JSON.parse(fs.readFileSync(p, "utf-8"))),
+      json: () => Promise.resolve(isJson ? JSON.parse(fs.readFileSync(p, "utf-8")) : {}),
     });
   }
   // real network (icons/basemap style) — resolve empty to keep test deterministic
@@ -63,7 +69,7 @@ for (const l of libs) {
 console.log("window.KeplerGl keys:", Object.keys(window.KeplerGl).slice(0, 12).join(", "));
 console.log("default is component (fn):", typeof window.KeplerGl.default);
 
-// run the page's inline script
+// run the page's inline script (optional run param: ?run=<slug>)
 const html = fs.readFileSync(path.join(WEB, "kepler.html"), "utf-8");
 const m = html.match(/<script>([\s\S]*?)<\/script>/);
 const inline = m[1];

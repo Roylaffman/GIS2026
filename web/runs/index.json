@@ -1,0 +1,29 @@
+{
+  "count": 2,
+  "runs": [
+    {
+      "slug": "grandfather-mountain",
+      "title": "Grandfather Mountain",
+      "center": [
+        -81.834313,
+        36.0953684
+      ],
+      "zoom": 12,
+      "query": "Grandfather Mountain attractions overlooks hiking",
+      "created": "2026-09-09T16:58+00:00",
+      "display_name": "Grandfather Mountain, 2050, Blowing Rock Highway, Linville, Avery County, North Carolina, 28646, United States"
+    },
+    {
+      "slug": "hanging-rock",
+      "title": "Hanging Rock",
+      "center": [
+        -81.8242778,
+        36.1537383
+      ],
+      "zoom": 12,
+      "query": "attractions near Hanging Rock State Park North Carolina",
+      "created": "2026-09-09T17:00+00:00",
+      "display_name": "Hanging Rock, Watauga County, North Carolina, 28648, United States"
+    }
+  ]
+}

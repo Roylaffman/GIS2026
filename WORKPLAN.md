@@ -23,7 +23,8 @@ POIs → DuckDB (spatial) → H3 → Leaflet / Deck.gl / Kepler.gl web maps.
    `.env.example` documents the required keys with placeholder values.
 
 **To resume tomorrow:** `cd C:\Users\royla\Documents\DSHtest`, read this file,
-then run `.\.venv\Scripts\python.exe serve_map.py 8090` to bring the maps back.
+then run `.\.venv\Scripts\python.exe serve_map.py 8090` to bring the maps back
+(root demo `/`, runs hub `/runs.html`, new runs via `quickmap.py`).
 
 ---
 
@@ -93,6 +94,13 @@ These bit us and will bite again — **do not rediscover them**:
 - **Kepler.gl** — `/kepler.html` (redux wiring + auto-load POIs; jsdom smoke test passes)
 - **`/config.js`** — serves `MAPBOX_TOKEN` from `.env` (never baked into HTML)
 - **Local server** — `serve_map.py` on `http://127.0.0.1:8090`
+- **QUICK-MAPS SYSTEM** — `quickmap.py` turns a place name into a full run:
+  - Nominatim (OSM) geocoding — open-source, no key
+  - `web/runs/<slug>/` with `run.json`, `pois.geojson`, `h3_hexagons.geojson`, `dem.tif`, `dem_cog.tif`
+  - One parameterized `deck.html`/`kepler.html` serves any run via `?run=<slug>`
+  - Hub at `/runs.html` lists runs from `web/runs/index.json`
+  - Proven runs: `grandfather-mountain` (20 POIs / 18 hex), `hanging-rock` (20 / 19)
+- **Remote push** — pushed to `github.com/Roylaffman/GIS2026` (done by user, verified in sync)
 
 ---
 
@@ -107,7 +115,10 @@ These bit us and will bite again — **do not rediscover them**:
 - [x] Kepler.gl redux wiring + auto-load (fixed blank-page bug)
 - [x] Mapbox token in `.env` + `/config.js` runtime endpoint
 - [x] Phase 2 COG (`make_cog.py`)
-- [x] git init, 2 commits on `main`, remote = GIS2026
+- [x] git init + commits on `main`, remote = GIS2026
+- [x] **Quick-maps system** — `quickmap.py`, parameterized deck/kepler pages,
+      runs hub `/runs.html`, manifest `web/runs/index.json`
+- [x] Pushed to GitHub (user pushed; verified `origin/main` in sync)
 
 ---
 
@@ -118,15 +129,15 @@ These bit us and will bite again — **do not rediscover them**:
 - [ ] **GCS upload** — push DEM/GeoJSON/COG to `gs://www.geoglypha1.org`
 
 **Next build steps (unblocked)**
-- [ ] **Deck.gl `TerrainLayer`** from `dem_cog.tif` (real 3D terrain, needs a terrain-RGB or `raster-dem` source; see `MODERN_GIS_STACK.md` Phase 3)
-- [ ] **CesiumJS globe** (`web/cesium.html`, Apache-2.0; self-host terrain to stay tokenless)
+- [ ] **Deck.gl `TerrainLayer`** from `dem_cog.tif` (real 3D terrain per run; needs terrain-RGB tiles served per run)
+- [ ] **CesiumJS globe** (per run too; Apache-2.0; self-host terrain to stay tokenless)
 - [ ] **PMTiles / vector tiles** for POIs (tippecanoe) once data grows
 - [ ] **GeoParquet** export so DuckDB + GeoPandas share one format
-- [ ] `.env.example` (document keys with placeholders) — *created in this session*
 - [ ] Kepler.gl auto-load polish: verify `addDataToMap` point layer renders as expected in browser
+- [ ] quickmap: fetch POIs for a run into DuckDB too (currently POIs only live as GeoJSON + H3)
 
 **Nice-to-have**
-- [ ] One `web/index.html` landing page linking all demos
+- [ ] One `web/index.html` landing page linking all demos (runs hub already exists at `/runs.html`)
 - [ ] Docker compose (verify sandbox allows Docker first)
 - [ ] Vendor script to rebuild `web/lib/` from npm (reproducibility)
 
@@ -143,15 +154,25 @@ DSHtest/
 ├── README.md                 # run instructions
 ├── requirements.txt          # Python deps
 ├── gis_common.py             # env loader + shared constants
+├── quickmap.py               # **quick-maps system** (place -> run folder)
 ├── fetch_dem.py              # OpenTopo -> DEM
 ├── fetch_pois.py             # SerpAPI -> POIs
 ├── build_db.py               # DuckDB spatial
 ├── build_h3.py               # H3 hexagons
 ├── make_cog.py               # DEM -> COG
 ├── make_web.py               # hillshade + Leaflet page
-├── serve_map.py              # static server + /config.js
+├── serve_map.py              # static server + /config.js (any depth)
 ├── data/                     # tif, geojson, duckdb, summaries
-├── web/                      # html pages + lib/ (vendored) + geojson + png
+├── web/
+│   ├── index.html            # Mount Mitchell Leaflet demo
+│   ├── deck.html             # parameterized Deck.gl (?run=<slug>)
+│   ├── kepler.html           # parameterized Kepler.gl (?run=<slug>)
+│   ├── runs.html             # hub listing all quick-map runs
+│   ├── runs/                 # one folder per quick map + index.json
+│   │   ├── index.json
+│   │   └── <slug>/{run.json, pois.geojson, h3_hexagons.geojson, dem.tif, dem_cog.tif}
+│   ├── lib/                  # vendored UMD bundles (git-ignored? no - committed)
+│   └── dem_hillshade.png, *.geojson   # root demo assets
 └── frontend/                 # package.json, node_modules (git-ignored),
                               # smoke_kepler.cjs (jsdom test)
 ```
@@ -165,6 +186,7 @@ DSHtest/
 .\.venv\Scripts\python.exe serve_map.py 8090
 
 # pipeline
+.\.venv\Scripts\python.exe quickmap.py "Place, State" --pois serpapi --query "attractions hiking"
 .\.venv\Scripts\python.exe fetch_dem.py --demtype SRTMGL1
 .\.venv\Scripts\python.exe fetch_pois.py --query "hiking trails near Mount Mitchell NC"
 .\.venv\Scripts\python.exe build_db.py

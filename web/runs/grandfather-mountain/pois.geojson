@@ -1,0 +1,365 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8424306,
+     36.0683195
+    ]
+   },
+   "properties": {
+    "name": "Grandfather Mountain Overlook",
+    "address": "Blue Ridge Pkwy, Linville, NC 28646",
+    "rating": 4.8,
+    "reviews": 265,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJhwmU6GDrUIgRPIeOf_HpptI"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8181518,
+     36.1040754
+    ]
+   },
+   "properties": {
+    "name": "Grandfather Mountain State Park",
+    "address": "9872 Highway 105 South, Banner Elk, NC 28604",
+    "rating": 4.8,
+    "reviews": 6734,
+    "ptype": "State park",
+    "place_id": "ChIJB2gJeQfyUIgRluXoqwFT3bo"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.79959989999999,
+     36.0970681
+    ]
+   },
+   "properties": {
+    "name": "Rough Ridge Lookout - Grandfather Mountain, NC.",
+    "address": "3218 Blue Ridge Pkwy, Linville, NC 28646",
+    "rating": 4.9,
+    "reviews": 1316,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJyzbNBTnsUIgRhmY8PnBNhHI"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.83227649999999,
+     36.0950382
+    ]
+   },
+   "properties": {
+    "name": "Grandfather Mountain",
+    "address": "2050 Blowing Rock Hwy, Linville, NC 28646",
+    "rating": 4.8,
+    "reviews": 6888,
+    "ptype": "Nature preserve",
+    "place_id": "ChIJFdD4J8LsUIgRwV8MGK9aw5M"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.82844469999999,
+     36.0825791
+    ]
+   },
+   "properties": {
+    "name": "Beacon Heights Overlook Trail",
+    "address": "Beacon Heights Trail, Linville, NC 28646",
+    "rating": 4.9,
+    "reviews": 601,
+    "ptype": "Hiking area",
+    "place_id": "ChIJWawpUI_sUIgRwmA7R-P2b00"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8322841,
+     36.0949786
+    ]
+   },
+   "properties": {
+    "name": "Mile High Swinging Bridge",
+    "address": "2050 Blowing Rock Hwy, Linville, NC 28646",
+    "rating": 4.8,
+    "reviews": 4336,
+    "ptype": "Tourist attraction",
+    "place_id": "ChIJG3CKkPLsUIgRFSGQe3WxKkE"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.7772554,
+     36.1114177
+    ]
+   },
+   "properties": {
+    "name": "Green Mountain Overlook",
+    "address": "100 Blue Ridge Pkwy, Blowing Rock, NC 28605",
+    "rating": 4.8,
+    "reviews": 157,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJI9Tf6H_uUIgRlctxwt9uujQ"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8088549,
+     36.1497124
+    ]
+   },
+   "properties": {
+    "name": "Otter Falls Trail",
+    "address": "825 Skyland Dr, Seven Devils, NC 28604",
+    "rating": 4.7,
+    "reviews": 968,
+    "ptype": "Hiking area",
+    "place_id": "ChIJ34-1II_tUIgREIxhu0aPy3s"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.85744369999999,
+     36.050863899999996
+    ]
+   },
+   "properties": {
+    "name": "Flat Rock Loop Trail",
+    "address": "3744 Blue Ridge Pkwy, Linville, NC 28646",
+    "rating": 4.8,
+    "reviews": 279,
+    "ptype": "Hiking area",
+    "place_id": "ChIJdT_N0TfrUIgRof2EoLqG1ww"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8721915,
+     36.0291795
+    ]
+   },
+   "properties": {
+    "name": "Lost Cove Cliffs Overlook",
+    "address": "3744 Blue Ridge Pkwy, Linville, NC 28646",
+    "rating": 4.7,
+    "reviews": 147,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJIaZ1jimVUIgRMtR2Jbd9iy8"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.83277509999999,
+     36.1191597
+    ]
+   },
+   "properties": {
+    "name": "Grandfather Mtn State Park Profile Trail",
+    "address": "4198 NC-105, Banner Elk, NC 28604",
+    "rating": 4.4,
+    "reviews": 16,
+    "ptype": "Hiking area",
+    "place_id": "ChIJE_PXJT7tUIgRgaySeTfTl_0"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8462718,
+     36.0850742
+    ]
+   },
+   "properties": {
+    "name": "Grandfather Mountain",
+    "address": "2050 Blowing Rock Hwy, Linville, NC 28646",
+    "rating": 4.5,
+    "reviews": 545,
+    "ptype": "Tourist attraction",
+    "place_id": "ChIJBVxlUZLsUIgRCc5oc0_kWYQ"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.81138899999999,
+     36.111111
+    ]
+   },
+   "properties": {
+    "name": "Grandfather Mountain",
+    "address": "Grandfather Trail, Linville, NC 28646",
+    "rating": 4.9,
+    "reviews": 16,
+    "ptype": "Hiking area",
+    "place_id": "ChIJSzQOF57tUIgRaWAb5yDX0Rk"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.6431617,
+     36.136284599999996
+    ]
+   },
+   "properties": {
+    "name": "Thunder Hill Overlook",
+    "address": "Blowing Rock, NC 28605",
+    "rating": 4.9,
+    "reviews": 790,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJ50CFItfkUIgRN3G2odyqkjM"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.843661,
+     36.0885743
+    ]
+   },
+   "properties": {
+    "name": "Half Moon Overlook",
+    "address": "Grandfather Mountain Entrance Rd, Linville, NC 28646",
+    "rating": 4.9,
+    "reviews": 9,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJvTXdLTPtUIgRxk6Kxz8ggVE"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.6334961,
+     36.1445102
+    ]
+   },
+   "properties": {
+    "name": "Raven Rocks Overlook",
+    "address": "Blue Ridge Pkwy, Boone, NC 28607",
+    "rating": 4.8,
+    "reviews": 425,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJ2w3VKDP7UIgRH5pplaWZZDg"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.6768993,
+     36.16256
+    ]
+   },
+   "properties": {
+    "name": "Flat Top Lookout Tower",
+    "address": "The Flat Top Rd, Blowing Rock, NC 28605",
+    "rating": 4.8,
+    "reviews": 203,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJN2Szmrv6UIgR0lNspGAqP6g"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.8227682,
+     36.1017569
+    ]
+   },
+   "properties": {
+    "name": "Macrae Peak",
+    "address": "Grandfather Trail, Linville, NC 28646",
+    "rating": 4.9,
+    "reviews": 79,
+    "ptype": "Park",
+    "place_id": "ChIJbZceeVztUIgR-a9OdF8md0M"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.68238699999999,
+     36.1528308
+    ]
+   },
+   "properties": {
+    "name": "Moses Cone Overlook",
+    "address": "Blue Ridge Pkwy, Blowing Rock, NC 28605",
+    "rating": 4.3,
+    "reviews": 65,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJOyuUfK76UIgR2HgKMOd1jpo"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -81.778843,
+     36.0999988
+    ]
+   },
+   "properties": {
+    "name": "Pilot Ridge Overlook",
+    "address": "Blue Ridge Pkwy, Blowing Rock, NC 28605",
+    "rating": 4.7,
+    "reviews": 43,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJcy9CACjsUIgRpACEz5jbAcc"
+   }
+  }
+ ]
+}

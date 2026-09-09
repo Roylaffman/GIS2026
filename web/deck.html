@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>Mount Mitchell — Deck.gl demo</title>
-<link rel="stylesheet" href="lib/maplibre-gl.css"/>
+<title>Deck.gl map</title>
+<link rel="stylesheet" href="/lib/maplibre-gl.css"/>
 <style>
   html,body,#map{height:100%;margin:0}
   #panel{position:absolute;z-index:1000;top:10px;left:10px;background:rgba(255,255,255,.92);
@@ -16,47 +16,55 @@
 </head>
 <body>
 <div id="panel">
-  <h1>&#9962; Mount Mitchell — Deck.gl</h1>
-  <div><b>Layers:</b> MapLibre basemap · H3 hexagons (POI density) · POI scatterplot</div>
-  <div style="margin-top:4px;color:#555">Hover a hexagon / dot for details. Built with
-  open-source <a href="https://deck.gl" target="_blank">Deck.gl</a> + H3.</div>
+  <h1 id="title">Deck.gl map</h1>
+  <div id="subtitle"><b>Layers:</b> H3 hexagons (POI density) · POI scatterplot</div>
+  <div style="margin-top:4px;color:#555">Built with open-source
+  <a href="https://deck.gl" target="_blank">Deck.gl</a> + MapLibre + H3.</div>
+  <div style="margin-top:8px;border-top:1px solid #ddd;padding-top:6px">
+    <a href="/runs.html">&#8592; All maps</a>
+  </div>
 </div>
 <div id="tooltip"></div>
 <div id="map"></div>
 
-<script src="lib/maplibre-gl.js"></script>
-<script src="lib/deck.gl.min.js"></script>
+<script src="/lib/maplibre-gl.js"></script>
+<script src="/lib/deck.gl.min.js"></script>
 <script>
 const { Deck, MapboxOverlay, ScatterplotLayer, GeoJsonLayer } = deck;
-const SUMMIT = [-82.2651, 35.7649];
-
-const map = new maplibregl.Map({
-  container: 'map',
-  style: {
-    version: 8,
-    sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256 } },
-    layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
-  },
-  center: SUMMIT,
-  zoom: 12,
-  pitch: 45
-});
-map.addControl(new maplibregl.NavigationControl());
-
-const overlay = new MapboxOverlay({ interleaved: true });
-map.addControl(overlay);
-
-let tooltipTimer = null;
 const tip = document.getElementById('tooltip');
 function showTip(x, y, html) {
   tip.innerHTML = html; tip.style.display = 'block';
   tip.style.left = (x + 12) + 'px'; tip.style.top = (y + 12) + 'px';
 }
 
-// H3 hexagons from DuckDB/H3 pipeline
-fetch('h3_hexagons.geojson').then(r => r.json()).then(hexFC => {
-  // POI scatterplot points
-  fetch('pois.geojson').then(r => r.json()).then(poiFC => {
+// ---- run resolution: /deck.html?run=<slug> OR /deck.html (root demo) ------
+const params = new URLSearchParams(window.location.search);
+const run = params.get('run');
+const dataRoot = run ? ('/runs/' + run + '/') : './';
+// root demo default = Mount Mitchell; runs carry their own run.json
+let CFG = { center: [-82.2651, 35.7649], title: 'Mount Mitchell — Deck.gl', zoom: 12 };
+
+function buildMap() {
+  document.getElementById('title').textContent = CFG.title;
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: {
+      version: 8,
+      sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256 } },
+      layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+    },
+    center: CFG.center,
+    zoom: CFG.zoom,
+    pitch: 45
+  });
+  map.addControl(new maplibregl.NavigationControl());
+  const overlay = new MapboxOverlay({ interleaved: true });
+  map.addControl(overlay);
+
+  Promise.all([
+    fetch(dataRoot + 'h3_hexagons.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),
+    fetch(dataRoot + 'pois.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] }))
+  ]).then(([hexFC, poiFC]) => {
     const layers = [
       new GeoJsonLayer({
         id: 'h3-hexagons',
@@ -74,17 +82,16 @@ fetch('h3_hexagons.geojson').then(r => r.json()).then(hexFC => {
         getLineColor: [255, 255, 255, 140],
         pickable: true,
         onHover: info => {
-          const el = document.getElementById('tooltip');
           if (info.object) {
             const p = info.object.properties;
-            showTip(info.x, info.y,
-              `<b>${p.count} POI(s)</b><br/>mean rating ${(p.mean_rating||0).toFixed(2)}<br/>${p.category||''}`);
-          } else { el.style.display = 'none'; }
+            const rate = p.mean_rating ? ` \u2605 ${Number(p.mean_rating).toFixed(2)}` : '';
+            showTip(info.x, info.y, `<b>${p.count} POI(s)</b>${rate}<br/>${p.category || ''}`);
+          } else { tip.style.display = 'none'; }
         }
       }),
       new ScatterplotLayer({
         id: 'poi-points',
-        data: poiFC.features,
+        data: poiFC.features || [],
         radiusScale: 20,
         radiusMinPixels: 4,
         getPosition: f => f.geometry.coordinates,
@@ -96,13 +103,23 @@ fetch('h3_hexagons.geojson').then(r => r.json()).then(hexFC => {
           if (info.object) {
             const p = info.object.properties;
             const rate = p.rating ? ` \u2605 ${p.rating}` : '';
-            showTip(info.x, info.y, `<b>${p.name}</b>${rate}<br/>${p.address||''}`);
+            showTip(info.x, info.y, `<b>${p.name}</b>${rate}<br/>${p.address || ''}`);
           }
         }
       })
     ];
     overlay.setProps({ layers });
   });
+}
+
+// try to load the run's run.json (root demo has none -> defaults above)
+fetch(dataRoot + 'run.json').then(r => r.ok ? r.json() : null).catch(() => null).then(cfg => {
+  if (cfg) {
+    if (cfg.center) CFG.center = cfg.center;
+    if (cfg.title) CFG.title = cfg.title;
+    if (cfg.zoom) CFG.zoom = cfg.zoom;
+  }
+  buildMap();
 });
 </script>
 </body>
