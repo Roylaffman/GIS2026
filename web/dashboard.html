@@ -95,58 +95,61 @@
     map.addControl(new maplibregl.ScaleControl({ maxWidth: 120 }), 'bottom-right');
     window._mapInstance = map;
 
-    // ---- terrain + hillshade ----
-    if (terrain) {
-      map.addSource('terrain-dem', {
-        type: 'raster-dem', tiles: [dataRoot + terrain.tiles],
-        tileSize: terrain.tileSize || 256, encoding: 'mapbox',
-        minzoom: terrain.minzoom || 9, maxzoom: terrain.maxzoom || 15
-      });
-      map.addLayer({ id: 'hillshade', type: 'hillshade', source: 'terrain-dem',
-        paint: { 'hillshade-exaggeration': 0.5 } });
-      map.setTerrain({ source: 'terrain-dem', exaggeration: 1.5 });
-    }
-
-    // ---- data layers (manifest) ----
     const list = document.getElementById('layerlist');
     const stats = document.getElementById('stats');
-    let statsHtml = [];
     const layerDefs = (manifest && manifest.layers) || [];
-    layerDefs.forEach(l => {
-      const srcId = 'src-' + l.id;
-      sources[l.id] = srcId;
-      layersState[l.id] = l.visible !== false;
-      map.addSource(srcId, { type: 'geojson', data: dataRoot + l.file });
-      if (l.type === 'fill') {
-        map.addLayer({ id: l.id, type: 'fill', source: srcId,
-          paint: { 'fill-color': l.color || '#1565c0', 'fill-opacity': l.opacity || 0.5,
-                   'fill-outline-color': l.outline || l.color || '#000' },
-          layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
-      } else if (l.type === 'line') {
-        map.addLayer({ id: l.id, type: 'line', source: srcId,
-          paint: { 'line-color': l.color || '#b71c1c', 'line-width': l.width || 2,
-                   'line-dasharray': l.dash || [1] },
-          layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
-      } else if (l.type === 'circle') {
-        map.addLayer({ id: l.id, type: 'circle', source: srcId,
-          paint: { 'circle-color': l.color || '#ff8f00', 'circle-radius': l.radius || 5,
-                   'circle-stroke-color': l.stroke || '#fff', 'circle-stroke-width': l.strokeWidth || 1 },
-          layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+
+    // ---- all style mutations must wait for the style to finish loading ----
+    map.on('load', () => {
+      // terrain + hillshade
+      if (terrain) {
+        map.addSource('terrain-dem', {
+          type: 'raster-dem', tiles: [dataRoot + terrain.tiles],
+          tileSize: terrain.tileSize || 256, encoding: 'mapbox',
+          minzoom: terrain.minzoom || 9, maxzoom: terrain.maxzoom || 15
+        });
+        map.addLayer({ id: 'hillshade', type: 'hillshade', source: 'terrain-dem',
+          paint: { 'hillshade-exaggeration': 0.5 } });
+        map.setTerrain({ source: 'terrain-dem', exaggeration: 1.5 });
       }
-      // legend row
-      const row = document.createElement('label');
-      row.className = 'layer-row';
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
-      swatch.style.background = l.color || '#888';
-      if (l.type === 'circle') swatch.style.borderRadius = '50%';
-      const cb = document.createElement('input');
-      cb.type = 'checkbox'; cb.checked = layersState[l.id];
-      cb.onchange = () => { layersState[l.id] = cb.checked; toggleLayer(l.id); };
-      const label = document.createElement('span');
-      label.textContent = l.label || l.id;
-      row.appendChild(cb); row.appendChild(swatch); row.appendChild(label);
-      list.appendChild(row);
+
+      // data layers from manifest
+      layerDefs.forEach(l => {
+        const srcId = 'src-' + l.id;
+        sources[l.id] = srcId;
+        layersState[l.id] = l.visible !== false;
+        map.addSource(srcId, { type: 'geojson', data: dataRoot + l.file });
+        if (l.type === 'fill') {
+          map.addLayer({ id: l.id, type: 'fill', source: srcId,
+            paint: { 'fill-color': l.color || '#1565c0', 'fill-opacity': l.opacity || 0.5,
+                     'fill-outline-color': l.outline || l.color || '#000' },
+            layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+        } else if (l.type === 'line') {
+          map.addLayer({ id: l.id, type: 'line', source: srcId,
+            paint: { 'line-color': l.color || '#b71c1c', 'line-width': l.width || 2,
+                     'line-dasharray': l.dash || [1] },
+            layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+        } else if (l.type === 'circle') {
+          map.addLayer({ id: l.id, type: 'circle', source: srcId,
+            paint: { 'circle-color': l.color || '#ff8f00', 'circle-radius': l.radius || 5,
+                     'circle-stroke-color': l.stroke || '#fff', 'circle-stroke-width': l.strokeWidth || 1 },
+            layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+        }
+        // legend row
+        const row = document.createElement('label');
+        row.className = 'layer-row';
+        const swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.background = l.color || '#888';
+        if (l.type === 'circle') swatch.style.borderRadius = '50%';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.checked = layersState[l.id];
+        cb.onchange = () => { layersState[l.id] = cb.checked; toggleLayer(l.id); };
+        const label = document.createElement('span');
+        label.textContent = l.label || l.id;
+        row.appendChild(cb); row.appendChild(swatch); row.appendChild(label);
+        list.appendChild(row);
+      });
     });
 
     function toggleLayer(layerId) {

@@ -66,25 +66,28 @@ function buildMap() {
   map.addControl(overlay);
 
   // ---- 3D terrain + hillshade from the DEM (terrain-RGB tiles) ----------
-  fetch(dataRoot + 'terrain.json').then(r => r.ok ? r.json() : null).catch(() => null).then(tj => {
-    if (!tj) return;
-    const tilesUrl = dataRoot + tj.tiles;
-    map.addSource('terrain-dem', {
-      type: 'raster-dem',
-      tiles: [tilesUrl],
-      tileSize: tj.tileSize || 256,
-      encoding: 'mapbox',
-      minzoom: tj.minzoom || 9,
-      maxzoom: tj.maxzoom || 15
+  // must wait for style load before adding sources/layers/setTerrain
+  map.on('load', () => {
+    fetch(dataRoot + 'terrain.json').then(r => r.ok ? r.json() : null).catch(() => null).then(tj => {
+      if (!tj) return;
+      const tilesUrl = dataRoot + tj.tiles;
+      map.addSource('terrain-dem', {
+        type: 'raster-dem',
+        tiles: [tilesUrl],
+        tileSize: tj.tileSize || 256,
+        encoding: 'mapbox',
+        minzoom: tj.minzoom || 9,
+        maxzoom: tj.maxzoom || 15
+      });
+      // hillshade layer (visual relief) over the basemap, under the data layers
+      map.addLayer({
+        id: 'hillshade',
+        type: 'hillshade',
+        source: 'terrain-dem',
+        paint: { 'hillshade-exaggeration': 0.5, 'hillshade-shadow-color': '#334' }
+      });
+      map.setTerrain({ source: 'terrain-dem', exaggeration: 1.6 });
     });
-    // hillshade layer (visual relief) over the basemap, under the data layers
-    map.addLayer({
-      id: 'hillshade',
-      type: 'hillshade',
-      source: 'terrain-dem',
-      paint: { 'hillshade-exaggeration': 0.5, 'hillshade-shadow-color': '#334' }
-    });
-    map.setTerrain({ source: 'terrain-dem', exaggeration: 1.6 });
   });
 
   Promise.all([
