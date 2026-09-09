@@ -117,6 +117,17 @@ These bit us and will bite again — **do not rediscover them**:
   Mitchell 1108–2021 m, Grandfather 1143–1600 m, Hanging Rock 945–1553 m).
   `web/dashboard.html` renders MapLibre terrain + manifest layers + legend
   toggles + Chart.js cross-section. Wired into `quickmap.py`.
+- **DATA INSPECTION tool** — `inspect_data.py` loads any vector dataset
+  (GeoJSON/Shapefile/GeoParquet/CSV) and reports rows, CRS, bounds (native +
+  WGS84), geometry-type breakdown, per-column nulls/uniques/min/max, coordinate
+  sanity, and duplicate/empty geometry counts; optional `--out` JSON + `--bounds`
+  bbox GeoJSON. (Verified on 20 Grandfather POIs.)
+- **DEM / BATHYMETRY ANALYSIS tool** — `analyze_dem.py` auto-detects terrain vs
+  bathymetry (values ≤ 0) and reports size/resolution/CRS, min/max/mean/median/std,
+  coverage, hypsometry histogram, and real-unit volume (water volume for bathy,
+  earthwork volume for terrain). Writes slope/aspect GeoTIFFs, hillshade PNG,
+  profile JSON, histogram JSON, report JSON. Verified: Mount Mitchell 64.2 km² /
+  95.5 Gm³; synthetic 120 m-deep lake → 125 Mm³ water (paraboloid-correct).
 - **Remote push** — pushed to `github.com/Roylaffman/GIS2026` (done by user, verified in sync)
 
 ---
@@ -139,6 +150,9 @@ These bit us and will bite again — **do not rediscover them**:
       raster-dem/hillshade/setTerrain; wired into quickmap.py
 - [x] **Dashboard view** — `make_dashboard.py` (layers.json + real profile.json)
       + `web/dashboard.html` (MapLibre terrain + layers + legend toggles + Chart.js)
+- [x] **inspect_data.py** — vector data QA (fields/CRS/bounds/nulls/duplicates)
+- [x] **analyze_dem.py** — DEM + bathymetry analysis (stats, hypsometry, volume,
+      slope/aspect/hillshade, profile)
 - [x] Pushed to GitHub (user pushed; verified `origin/main` in sync)
 
 ---
@@ -184,6 +198,9 @@ DSHtest/
 ├── make_terrain.py           # DEM -> terrain-RGB XYZ tiles + terrain.json
 ├── make_dashboard.py         # run -> layers.json manifest + real DEM profile.json
 ├── make_web.py               # hillshade + Leaflet page
+├── inspect_data.py           # vector data QA/inspection CLI
+├── analyze_dem.py            # DEM + bathymetry analysis CLI
+├── make_sample_bathy.py      # synthetic bathymetry test fixture
 ├── serve_map.py              # static server + /config.js (any depth)
 ├── data/                     # tif, geojson, duckdb, summaries
 ├── web/

@@ -26,6 +26,16 @@ AOI = {
 }
 
 
+def fix_proj() -> Path | None:
+    """Point PROJ at the venv's bundled proj.db if a conflicting global
+    PROJ_LIB is set (e.g. a PostGIS install). Returns the dir used, or None."""
+    candidate = PROJECT_ROOT / ".venv" / "Lib" / "site-packages" / "rasterio" / "proj_data"
+    if candidate.is_dir() and (candidate / "proj.db").exists():
+        os.environ["PROJ_LIB"] = str(candidate)
+        return candidate
+    return None
+
+
 def load_env(path: Path | None = None) -> dict[str, str]:
     """Minimal .env parser: KEY=VALUE lines, # comments, no interpolation."""
     env: dict[str, str] = {}
