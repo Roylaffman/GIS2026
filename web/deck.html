@@ -17,7 +17,7 @@
 <body>
 <div id="panel">
   <h1 id="title">Deck.gl map</h1>
-  <div id="subtitle"><b>Layers:</b> H3 hexagons (POI density) · POI scatterplot</div>
+  <div id="subtitle"><b>Layers:</b> 3D terrain + hillshade (DEM) · H3 hexagons · POI scatterplot</div>
   <div style="margin-top:4px;color:#555">Built with open-source
   <a href="https://deck.gl" target="_blank">Deck.gl</a> + MapLibre + H3.</div>
   <div style="margin-top:8px;border-top:1px solid #ddd;padding-top:6px">
@@ -55,11 +55,35 @@ function buildMap() {
     },
     center: CFG.center,
     zoom: CFG.zoom,
-    pitch: 45
+    pitch: 60,
+    bearing: -20,
+    maxPitch: 80
   });
-  map.addControl(new maplibregl.NavigationControl());
+  map.addControl(new maplibregl.NavigationControl(), 'top-right');
   const overlay = new MapboxOverlay({ interleaved: true });
   map.addControl(overlay);
+
+  // ---- 3D terrain + hillshade from the DEM (terrain-RGB tiles) ----------
+  fetch(dataRoot + 'terrain.json').then(r => r.ok ? r.json() : null).catch(() => null).then(tj => {
+    if (!tj) return;
+    const tilesUrl = dataRoot + tj.tiles;
+    map.addSource('terrain-dem', {
+      type: 'raster-dem',
+      tiles: [tilesUrl],
+      tileSize: tj.tileSize || 256,
+      encoding: 'mapbox',
+      minzoom: tj.minzoom || 9,
+      maxzoom: tj.maxzoom || 15
+    });
+    // hillshade layer (visual relief) over the basemap, under the data layers
+    map.addLayer({
+      id: 'hillshade',
+      type: 'hillshade',
+      source: 'terrain-dem',
+      paint: { 'hillshade-exaggeration': 0.5, 'hillshade-shadow-color': '#334' }
+    });
+    map.setTerrain({ source: 'terrain-dem', exaggeration: 1.6 });
+  });
 
   Promise.all([
     fetch(dataRoot + 'h3_hexagons.geojson').then(r => r.ok ? r.json() : { features: [] }).catch(() => ({ features: [] })),

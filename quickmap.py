@@ -235,6 +235,12 @@ def build_run(place: str, query: str | None, demtype: str, radius_deg: float, re
         make_cog(dem, out_dir)
     except Exception as e:
         print(f"  (cog skipped: {e})")
+    # terrain-RGB tiles so deck.html shows 3D terrain + hillshade
+    try:
+        from make_terrain import make_terrain
+        make_terrain(dem, out_dir)
+    except Exception as e:
+        print(f"  (terrain skipped: {e})")
 
     n_pois = 0
     if pois == "serpapi":

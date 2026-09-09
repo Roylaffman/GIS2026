@@ -79,6 +79,8 @@ These bit us and will bite again — **do not rediscover them**:
 | 10 | kepler.gl UMD needs 5 browser globals | blank page / "KeplerGl undefined" | Load `React, ReactDOM, Redux, ReactRedux, styled-components` before keplergl (v4/v8 for UMD) |
 | 11 | kepler.gl requires Redux `<Provider>` | **blank page** (our #1 bug) | Wrap component in `<Provider store>` + `keplerGlReducer` + `enhanceReduxMiddleware` |
 | 12 | kepler.gl basemap is Mapbox | needs token | Token via `/config.js`; data layers work tokenless |
+| 13 | `PROJ_LIB` env points at PostGIS old proj.db | `CRSError: proj_create_from_database ... LAYOUT.VERSION.MINOR` | Set `PROJ_LIB` to `.venv\Lib\site-packages\rasterio\proj_data` before rasterio warp/COG |
+| 14 | PNG tile writes warn "NotGeoreferenced" | noisy but harmless | filter the warning; XYZ naming carries georef |
 
 ---
 
@@ -100,6 +102,12 @@ These bit us and will bite again — **do not rediscover them**:
   - One parameterized `deck.html`/`kepler.html` serves any run via `?run=<slug>`
   - Hub at `/runs.html` lists runs from `web/runs/index.json`
   - Proven runs: `grandfather-mountain` (20 POIs / 18 hex), `hanging-rock` (20 / 19)
+- **3D TERRAIN + HILLSHADE on Deck.gl** — `make_terrain.py` generates Mapbox
+  terrain-RGB XYZ tiles from any DEM (`tiles/{z}/{x}/{y}.png` + `terrain.json`).
+  `deck.html` adds a `raster-dem` source + hillshade layer + `map.setTerrain()`,
+  so the DEM now renders as real 3D relief (verified: root summit tile decodes
+  0–2028 m, Grandfather 0–1658 m, Hanging Rock 928–1571 m). Wired into
+  `quickmap.py` so every new run gets terrain automatically.
 - **Remote push** — pushed to `github.com/Roylaffman/GIS2026` (done by user, verified in sync)
 
 ---
@@ -118,6 +126,8 @@ These bit us and will bite again — **do not rediscover them**:
 - [x] git init + commits on `main`, remote = GIS2026
 - [x] **Quick-maps system** — `quickmap.py`, parameterized deck/kepler pages,
       runs hub `/runs.html`, manifest `web/runs/index.json`
+- [x] **3D terrain + hillshade** — `make_terrain.py` terrain-RGB tiles + deck.html
+      raster-dem/hillshade/setTerrain; wired into quickmap.py
 - [x] Pushed to GitHub (user pushed; verified `origin/main` in sync)
 
 ---
@@ -129,8 +139,7 @@ These bit us and will bite again — **do not rediscover them**:
 - [ ] **GCS upload** — push DEM/GeoJSON/COG to `gs://www.geoglypha1.org`
 
 **Next build steps (unblocked)**
-- [ ] **Deck.gl `TerrainLayer`** from `dem_cog.tif` (real 3D terrain per run; needs terrain-RGB tiles served per run)
-- [ ] **CesiumJS globe** (per run too; Apache-2.0; self-host terrain to stay tokenless)
+- [ ] **CesiumJS globe** (per run; Apache-2.0; self-host terrain to stay tokenless)
 - [ ] **PMTiles / vector tiles** for POIs (tippecanoe) once data grows
 - [ ] **GeoParquet** export so DuckDB + GeoPandas share one format
 - [ ] Kepler.gl auto-load polish: verify `addDataToMap` point layer renders as expected in browser
@@ -160,6 +169,7 @@ DSHtest/
 ├── build_db.py               # DuckDB spatial
 ├── build_h3.py               # H3 hexagons
 ├── make_cog.py               # DEM -> COG
+├── make_terrain.py           # DEM -> terrain-RGB XYZ tiles + terrain.json
 ├── make_web.py               # hillshade + Leaflet page
 ├── serve_map.py              # static server + /config.js (any depth)
 ├── data/                     # tif, geojson, duckdb, summaries
@@ -170,8 +180,10 @@ DSHtest/
 │   ├── runs.html             # hub listing all quick-map runs
 │   ├── runs/                 # one folder per quick map + index.json
 │   │   ├── index.json
-│   │   └── <slug>/{run.json, pois.geojson, h3_hexagons.geojson, dem.tif, dem_cog.tif}
-│   ├── lib/                  # vendored UMD bundles (git-ignored? no - committed)
+│   │   └── <slug>/{run.json, pois.geojson, h3_hexagons.geojson, dem.tif, dem_cog.tif,
+│   │               terrain.json, tiles/{z}/{x}/{y}.png}
+│   ├── lib/                  # vendored UMD bundles (committed)
+│   ├── tiles/ + terrain.json # root demo terrain
 │   └── dem_hillshade.png, *.geojson   # root demo assets
 └── frontend/                 # package.json, node_modules (git-ignored),
                               # smoke_kepler.cjs (jsdom test)
