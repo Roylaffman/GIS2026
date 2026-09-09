@@ -48,8 +48,9 @@ fetch('runs/index.json').then(r => r.ok ? r.json() : null).catch(() => null).the
     div.innerHTML =
       `<h2>&#128205; ${escapeHtml(run.title || run.slug)}</h2>` +
       `<div class="meta">${when}${query}</div>${display}` +
-      `<a class="deck" href="deck.html?run=${encodeURIComponent(run.slug)}">Deck.gl map</a>` +
-      `<a class="kep" href="kepler.html?run=${encodeURIComponent(run.slug)}">Kepler.gl explore</a>`;
+      `<a class="deck" href="deck.html?run=${encodeURIComponent(run.slug)}">Deck.gl (3D terrain)</a>` +
+      `<a class="kep" href="kepler.html?run=${encodeURIComponent(run.slug)}">Kepler.gl explore</a>` +
+      `<a class="deck" style="background:#5c6bc0" href="dashboard.html?run=${encodeURIComponent(run.slug)}">Dashboard</a>`;
     list.appendChild(div);
   }
 });

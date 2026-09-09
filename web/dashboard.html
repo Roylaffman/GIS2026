@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>GIS Dashboard</title>
+<link rel="stylesheet" href="/lib/maplibre-gl.css"/>
+<style>
+  html,body,#map{height:100%;margin:0}
+  body{font:13px/1.5 'Segoe UI',sans-serif}
+  #panel{position:absolute;z-index:1000;top:10px;left:10px;width:280px;background:rgba(255,255,255,.94);
+         border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.25);overflow:hidden}
+  #panel header{background:#1a2a3a;color:#fff;padding:10px 14px}
+  #panel header h1{margin:0;font-size:15px}
+  #panel header p{margin:2px 0 0;font-size:11.5px;opacity:.85}
+  #panel .body{padding:10px 14px;max-height:60vh;overflow-y:auto}
+  .lbl{font-weight:600;margin:10px 0 4px}
+  .layer-row{display:flex;align-items:center;gap:7px;margin:3px 0;cursor:pointer}
+  .layer-row input{accent-color:#1565c0}
+  .swatch{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.2);flex:0 0 auto}
+  .layer-row span{flex:1}
+  #chartbox{position:absolute;z-index:1000;bottom:20px;left:10px;width:380px;background:rgba(255,255,255,.95);
+            border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.25);padding:10px}
+  #chartbox h2{margin:0 0 4px;font-size:13px}
+  #chartbox canvas{max-height:150px}
+  #chartbox a{position:absolute;top:8px;right:10px;font-size:11px;color:#888;text-decoration:none}
+  #chartbox a:hover{color:#b71c1c}
+  .stat{margin:2px 0;font-size:12px}
+  .stat b{color:#1565c0}
+  #err{position:absolute;z-index:2000;bottom:10px;right:10px;background:#b71c1c;color:#fff;
+       padding:8px 12px;border-radius:6px;font-size:12px;display:none}
+</style>
+</head>
+<body>
+<div id="panel">
+  <header>
+    <h1 id="title">GIS Dashboard</h1>
+    <p id="subtitle">Terrain + data layers + cross-section</p>
+  </header>
+  <div class="body">
+    <div class="lbl">Layers</div>
+    <div id="layerlist"></div>
+    <div class="lbl">Stats</div>
+    <div id="stats">—</div>
+    <div style="margin-top:10px;border-top:1px solid #eee;padding-top:8px">
+      <a href="/runs.html" style="color:#1565c0;text-decoration:none">&larr; All maps</a>
+    </div>
+  </div>
+</div>
+<div id="chartbox">
+  <h2 id="charttitle">Elevation cross-section</h2>
+  <a href="#" id="chartclose" title="hide">✕</a>
+  <canvas id="elevationChart"></canvas>
+</div>
+<div id="err"></div>
+<div id="map"></div>
+
+<script src="/config.js"></script>
+<script src="/lib/maplibre-gl.js"></script>
+<script src="/lib/chart.umd.min.js"></script>
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const run = params.get('run');
+  const dataRoot = run ? ('/runs/' + run + '/') : './';
+
+  function err(msg) { const e = document.getElementById('err'); e.textContent = msg; e.style.display = 'block'; }
+
+  const layersState = {};   // id -> visibility
+  const sources = {};       // id -> source id
+
+  Promise.all([
+    fetch(dataRoot + 'run.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(dataRoot + 'terrain.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(dataRoot + 'layers.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(dataRoot + 'profile.json').then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([runMeta, terrain, manifest, profile]) => {
+    const title = (runMeta && runMeta.title) || 'Mount Mitchell';
+    const center = (runMeta && runMeta.center) || [-82.2651, 35.7649];
+    const zoom = (runMeta && runMeta.zoom) || 12;
+    document.getElementById('title').textContent = title + ' — Dashboard';
+    if (runMeta && runMeta.display_name) {
+      document.getElementById('subtitle').textContent = runMeta.display_name;
+    }
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256 } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center, zoom, pitch: 55, bearing: -20, maxPitch: 80
+    });
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.addControl(new maplibregl.ScaleControl({ maxWidth: 120 }), 'bottom-right');
+    window._mapInstance = map;
+
+    // ---- terrain + hillshade ----
+    if (terrain) {
+      map.addSource('terrain-dem', {
+        type: 'raster-dem', tiles: [dataRoot + terrain.tiles],
+        tileSize: terrain.tileSize || 256, encoding: 'mapbox',
+        minzoom: terrain.minzoom || 9, maxzoom: terrain.maxzoom || 15
+      });
+      map.addLayer({ id: 'hillshade', type: 'hillshade', source: 'terrain-dem',
+        paint: { 'hillshade-exaggeration': 0.5 } });
+      map.setTerrain({ source: 'terrain-dem', exaggeration: 1.5 });
+    }
+
+    // ---- data layers (manifest) ----
+    const list = document.getElementById('layerlist');
+    const stats = document.getElementById('stats');
+    let statsHtml = [];
+    const layerDefs = (manifest && manifest.layers) || [];
+    layerDefs.forEach(l => {
+      const srcId = 'src-' + l.id;
+      sources[l.id] = srcId;
+      layersState[l.id] = l.visible !== false;
+      map.addSource(srcId, { type: 'geojson', data: dataRoot + l.file });
+      if (l.type === 'fill') {
+        map.addLayer({ id: l.id, type: 'fill', source: srcId,
+          paint: { 'fill-color': l.color || '#1565c0', 'fill-opacity': l.opacity || 0.5,
+                   'fill-outline-color': l.outline || l.color || '#000' },
+          layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+      } else if (l.type === 'line') {
+        map.addLayer({ id: l.id, type: 'line', source: srcId,
+          paint: { 'line-color': l.color || '#b71c1c', 'line-width': l.width || 2,
+                   'line-dasharray': l.dash || [1] },
+          layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+      } else if (l.type === 'circle') {
+        map.addLayer({ id: l.id, type: 'circle', source: srcId,
+          paint: { 'circle-color': l.color || '#ff8f00', 'circle-radius': l.radius || 5,
+                   'circle-stroke-color': l.stroke || '#fff', 'circle-stroke-width': l.strokeWidth || 1 },
+          layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+      }
+      // legend row
+      const row = document.createElement('label');
+      row.className = 'layer-row';
+      const swatch = document.createElement('span');
+      swatch.className = 'swatch';
+      swatch.style.background = l.color || '#888';
+      if (l.type === 'circle') swatch.style.borderRadius = '50%';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = layersState[l.id];
+      cb.onchange = () => { layersState[l.id] = cb.checked; toggleLayer(l.id); };
+      const label = document.createElement('span');
+      label.textContent = l.label || l.id;
+      row.appendChild(cb); row.appendChild(swatch); row.appendChild(label);
+      list.appendChild(row);
+    });
+
+    function toggleLayer(layerId) {
+      const vis = layersState[layerId] ? 'visible' : 'none';
+      if (map.getLayer(layerId)) map.setLayoutProperty(layerId, 'visibility', vis);
+      // for fill+outline pairs (dem-extent etc.) only one layer, fine
+    }
+
+    // ---- stats from profile + layers ----
+    if (profile) {
+      statsHtml.push(`<div class="stat">Elevation: <b>${profile.min}–${profile.max} m</b></div>`);
+      statsHtml.push(`<div class="stat">Transect: <b>${profile.distances[profile.distances.length - 1]} km</b></div>`);
+    }
+    if (runMeta && runMeta.query) {
+      statsHtml.push(`<div class="stat">Query: <i>${runMeta.query}</i></div>`);
+    }
+    stats.innerHTML = statsHtml.join('') || '—';
+
+    // ---- cross-section chart ----
+    if (profile && window.Chart) {
+      const ctx = document.getElementById('elevationChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: profile.distances,
+          datasets: [{ label: 'elevation (m)', data: profile.elevations,
+            borderColor: '#1565c0', backgroundColor: 'rgba(21,101,192,.15)',
+            fill: true, tension: 0.2, pointRadius: 0 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { title: { display: true, text: profile.xLabel } },
+                    y: { title: { display: true, text: profile.yLabel } } }
+        }
+      });
+      document.getElementById('charttitle').textContent = profile.title || 'Elevation cross-section';
+    } else {
+      document.getElementById('chartbox').style.display = 'none';
+    }
+    document.getElementById('chartclose').onclick = (e) => {
+      e.preventDefault(); document.getElementById('chartbox').style.display = 'none';
+    };
+  }).catch(e => err(e.message));
+})();
+</script>
+</body>
+</html>

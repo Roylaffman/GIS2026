@@ -21,7 +21,8 @@
   <div style="margin-top:4px;color:#555">Built with open-source
   <a href="https://deck.gl" target="_blank">Deck.gl</a> + MapLibre + H3.</div>
   <div style="margin-top:8px;border-top:1px solid #ddd;padding-top:6px">
-    <a href="/runs.html">&#8592; All maps</a>
+    <a href="/runs.html">&#8592; All maps</a> ·
+    <a href="#" id="dashlink">Dashboard view</a>
   </div>
 </div>
 <div id="tooltip"></div>
@@ -41,6 +42,7 @@ function showTip(x, y, html) {
 const params = new URLSearchParams(window.location.search);
 const run = params.get('run');
 const dataRoot = run ? ('/runs/' + run + '/') : './';
+document.getElementById('dashlink').href = '/dashboard.html' + (run ? '?run=' + run : '');
 // root demo default = Mount Mitchell; runs carry their own run.json
 let CFG = { center: [-82.2651, 35.7649], title: 'Mount Mitchell — Deck.gl', zoom: 12 };
 

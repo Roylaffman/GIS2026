@@ -241,6 +241,12 @@ def build_run(place: str, query: str | None, demtype: str, radius_deg: float, re
         make_terrain(dem, out_dir)
     except Exception as e:
         print(f"  (terrain skipped: {e})")
+    # dashboard manifest + real cross-section profile
+    try:
+        from make_dashboard import make_dashboard
+        make_dashboard(out_dir)
+    except Exception as e:
+        print(f"  (dashboard skipped: {e})")
 
     n_pois = 0
     if pois == "serpapi":
@@ -265,6 +271,7 @@ def build_run(place: str, query: str | None, demtype: str, radius_deg: float, re
     print(f"\nDONE -> web/runs/{slug}/  ({len(runs)} run(s) total)")
     print(f"  Deck.gl   : http://127.0.0.1:8090/deck.html?run={slug}")
     print(f"  Kepler.gl : http://127.0.0.1:8090/kepler.html?run={slug}")
+    print(f"  Dashboard : http://127.0.0.1:8090/dashboard.html?run={slug}")
     return str(out_dir)
 
 

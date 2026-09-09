@@ -1,0 +1,38 @@
+{
+  "layers": [
+    {
+      "id": "h3-density",
+      "label": "POI density (H3)",
+      "type": "fill",
+      "file": "h3_hexagons.geojson",
+      "color": "#1565c0",
+      "opacity": 0.45,
+      "outline": "#0d47a1",
+      "visible": true
+    },
+    {
+      "id": "poi-points",
+      "label": "Points of interest",
+      "type": "circle",
+      "file": "pois.geojson",
+      "color": "#ff8f00",
+      "radius": 5,
+      "stroke": "#ffffff",
+      "strokeWidth": 1,
+      "visible": true
+    },
+    {
+      "id": "dem-extent",
+      "label": "DEM extent",
+      "type": "line",
+      "file": "dem_extent.geojson",
+      "color": "#b71c1c",
+      "width": 1.5,
+      "dash": [
+        2,
+        2
+      ],
+      "visible": false
+    }
+  ]
+}

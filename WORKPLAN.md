@@ -108,6 +108,15 @@ These bit us and will bite again — **do not rediscover them**:
   so the DEM now renders as real 3D relief (verified: root summit tile decodes
   0–2028 m, Grandfather 0–1658 m, Hanging Rock 928–1571 m). Wired into
   `quickmap.py` so every new run gets terrain automatically.
+- **DASHBOARD view (open-source flood-dashboard equivalent)** — studied the
+  geoglypha bat-cave flood dashboard (Mapbox GL JS + Mapbox-hosted terrain +
+  hand-authored GeoJSON + Chart.js synthetic cross-section). Built the
+  open-source, data-driven equivalent: `make_dashboard.py` writes a `layers.json`
+  manifest (any GeoJSON → styled fill/line/circle layer + visibility) and a
+  REAL `profile.json` elevation cross-section sampled from the DEM (Mount
+  Mitchell 1108–2021 m, Grandfather 1143–1600 m, Hanging Rock 945–1553 m).
+  `web/dashboard.html` renders MapLibre terrain + manifest layers + legend
+  toggles + Chart.js cross-section. Wired into `quickmap.py`.
 - **Remote push** — pushed to `github.com/Roylaffman/GIS2026` (done by user, verified in sync)
 
 ---
@@ -128,6 +137,8 @@ These bit us and will bite again — **do not rediscover them**:
       runs hub `/runs.html`, manifest `web/runs/index.json`
 - [x] **3D terrain + hillshade** — `make_terrain.py` terrain-RGB tiles + deck.html
       raster-dem/hillshade/setTerrain; wired into quickmap.py
+- [x] **Dashboard view** — `make_dashboard.py` (layers.json + real profile.json)
+      + `web/dashboard.html` (MapLibre terrain + layers + legend toggles + Chart.js)
 - [x] Pushed to GitHub (user pushed; verified `origin/main` in sync)
 
 ---
@@ -139,6 +150,7 @@ These bit us and will bite again — **do not rediscover them**:
 - [ ] **GCS upload** — push DEM/GeoJSON/COG to `gs://www.geoglypha1.org`
 
 **Next build steps (unblocked)**
+- [ ] **Arbitrary raster overlays** in dashboard/deck (flood extents, SST, etc. as colorized GeoTIFF + legend/colorbar) — next step toward the flood/`climate` dashboards
 - [ ] **CesiumJS globe** (per run; Apache-2.0; self-host terrain to stay tokenless)
 - [ ] **PMTiles / vector tiles** for POIs (tippecanoe) once data grows
 - [ ] **GeoParquet** export so DuckDB + GeoPandas share one format
@@ -170,6 +182,7 @@ DSHtest/
 ├── build_h3.py               # H3 hexagons
 ├── make_cog.py               # DEM -> COG
 ├── make_terrain.py           # DEM -> terrain-RGB XYZ tiles + terrain.json
+├── make_dashboard.py         # run -> layers.json manifest + real DEM profile.json
 ├── make_web.py               # hillshade + Leaflet page
 ├── serve_map.py              # static server + /config.js (any depth)
 ├── data/                     # tif, geojson, duckdb, summaries
@@ -177,6 +190,7 @@ DSHtest/
 │   ├── index.html            # Mount Mitchell Leaflet demo
 │   ├── deck.html             # parameterized Deck.gl (?run=<slug>)
 │   ├── kepler.html           # parameterized Kepler.gl (?run=<slug>)
+│   ├── dashboard.html        # parameterized dashboard (terrain+layers+profile)
 │   ├── runs.html             # hub listing all quick-map runs
 │   ├── runs/                 # one folder per quick map + index.json
 │   │   ├── index.json
