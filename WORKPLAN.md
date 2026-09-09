@@ -1,0 +1,196 @@
+# WORKPLAN — DSHarnessGIS
+
+> Single source of truth for this project: **what's done, what's next, what's
+> installed, and every harness snag we hit** (so tomorrow starts fast).
+> Companion to `MODERN_GIS_STACK.md` (the *architecture* plan) and `README.md`
+> (the *how-to-run*).
+
+**Project:** Mount Mitchell, NC GIS pipeline — OpenTopography DEM → SerpAPI
+POIs → DuckDB (spatial) → H3 → Leaflet / Deck.gl / Kepler.gl web maps.
+
+---
+
+## 0. How to "save work" in this harness (the workflow)
+
+1. **Git commits are the primary save.** The repo lives on local disk at
+   `C:\Users\royla\Documents\DSHtest\.git` — it survives session restarts.
+   Commit early/often: `git add -A && git commit -m "..."`.
+2. **This WORKPLAN.md is the memory.** After every working session, update
+   the ✅/⬜ checklists below. This is what lets you resume without me.
+3. **Push to GitHub = off-machine backup.** Blocked only on credentials
+   (see §8). Once a token is available: `git push -u origin main`.
+4. **`.env` holds secrets** and is git-ignored — never commit it.
+   `.env.example` documents the required keys with placeholder values.
+
+**To resume tomorrow:** `cd C:\Users\royla\Documents\DSHtest`, read this file,
+then run `.\.venv\Scripts\python.exe serve_map.py 8090` to bring the maps back.
+
+---
+
+## 1. Environment — what's installed
+
+### Python 3.11.9 (`.venv`)
+| Package | Version | Used by |
+|---|---|---|
+| duckdb | 1.5.5 | `build_db.py` (spatial SQL) |
+| rasterio | 1.4.4 | DEM read, hillshade, COG |
+| numpy | 2.4.6 | array math |
+| geopandas | 1.1.4 | vector ETL |
+| h3 | 4.5.0 | hex binning |
+| pyarrow | 25.0.1 | (Geo)Parquet |
+| shapely / pyproj / pyogrio | (deps) | geometry / CRS |
+
+### Node v24.20.0 + npm 10.7.0 (`frontend/node_modules`)
+| Package | Version | Purpose |
+|---|---|---|
+| deck.gl | 9.4.0 | WebGL viz (UMD vendored) |
+| kepler.gl | 3.2.6 | explorer UI (UMD vendored) |
+| react / react-dom | 18.3.1 | kepler.gl runtime |
+| redux / react-redux | 4.2.1 / 8.1.3 | kepler.gl store (v4/v8 = UMD builds) |
+| styled-components | 6.1.8 | kepler.gl runtime (exact pin) |
+| maplibre-gl | 5.24.0 | basemap for deck.gl |
+| jsdom | 30.0.1 | headless smoke tests |
+| vite | 6.4.3 | **installed but unusable** (esbuild blocked, §2) |
+
+### Services / keys (`.env`)
+- `OPENTOPO_API_KEY` ✅ working (DEM fetch)
+- `SERPAPI_KEY` ✅ working (POI fetch)
+- `MAPBOX_TOKEN` ✅ working (kepler.gl basemap), served via `/config.js`
+- `GCS_BUCKET` ⬜ configured but unused so far
+
+---
+
+## 2. Harness snags & workarounds (the knowledge base)
+
+These bit us and will bite again — **do not rediscover them**:
+
+| # | Snag | Symptom | Workaround |
+|---|---|---|---|
+| 1 | PowerShell schannel TLS broken | `curl`/`Invoke-WebRequest` → `SEC_E_NO_CREDENTIALS` | Use **Python `urllib` or Node** (OpenSSL) for network |
+| 2 | Headless Chrome can't launch | sandbox blocks its IPC/named pipes | Can't screenshot pages; verify via `node --check` + jsdom smoke tests; **user views in browser** |
+| 3 | esbuild/vite can't spawn native binary | `spawn EPERM` | **No bundler.** Use prebuilt UMD bundles + `<script>` tags |
+| 4 | npm postinstall scripts fail | `spawn EPERM` | `npm install --ignore-scripts` |
+| 5 | npm cache dir outside sandbox | `EPERM` writing `%APPDATA%\npm-cache` | `$env:npm_config_cache = "...\.npm-cache"` |
+| 6 | stray `package.json` at `C:\Users\royla\` | npm installs to wrong root | Always run npm from `frontend/` |
+| 7 | DuckDB extension dir outside sandbox | `Access denied` on `~\.duckdb` | `SET extension_directory='data/duckdb_ext'` (done in `build_db.py`) |
+| 8 | git credential manager can't run | `sh.exe` `CreateFileMapping` error | Push needs an inline token (§8) |
+| 9 | Node 24 + `"type":"module"` | `.js` files treated as ESM | Name CommonJS scripts `.cjs` (e.g. smoke test) |
+| 10 | kepler.gl UMD needs 5 browser globals | blank page / "KeplerGl undefined" | Load `React, ReactDOM, Redux, ReactRedux, styled-components` before keplergl (v4/v8 for UMD) |
+| 11 | kepler.gl requires Redux `<Provider>` | **blank page** (our #1 bug) | Wrap component in `<Provider store>` + `keplerGlReducer` + `enhanceReduxMiddleware` |
+| 12 | kepler.gl basemap is Mapbox | needs token | Token via `/config.js`; data layers work tokenless |
+
+---
+
+## 3. What works today ✅
+
+- **DEM fetch** — `fetch_dem.py` → `data/dem_mount_mitchell.tif` (SRTMGL1, 288×288, 937–2029 m)
+- **POI fetch** — `fetch_pois.py` → `data/pois.geojson` (20 POIs via SerpAPI Google Maps)
+- **DuckDB spatial** — `build_db.py` → `data/gis.duckdb` (nearest-to-summit, AOI-in-count, categories)
+- **H3 hexagons** — `build_h3.py` → `web/h3_hexagons.geojson` (17 cells @ res 8)
+- **COG** — `make_cog.py` → `data/dem_cog.tif` (tiled + deflate + overviews [2,4,8])
+- **Leaflet map** — `/` (hillshade + POI markers + "POIs loaded: 20")
+- **Deck.gl map** — `/deck.html` (MapLibre basemap + H3 hexagons + scatterplot)
+- **Kepler.gl** — `/kepler.html` (redux wiring + auto-load POIs; jsdom smoke test passes)
+- **`/config.js`** — serves `MAPBOX_TOKEN` from `.env` (never baked into HTML)
+- **Local server** — `serve_map.py` on `http://127.0.0.1:8090`
+
+---
+
+## 4. Tasks — DONE ✅
+
+- [x] `.env` with all keys; `.gitignore` excludes secrets
+- [x] OpenTopo DEM + SerpAPI POIs (corrected 64-char SerpAPI key)
+- [x] DuckDB spatial DB + analysis report
+- [x] Leaflet map with hillshade + POIs (fixed `DEM_BOUNDS.map`→`.flat()` runtime bug)
+- [x] GeoPandas + H3 installed; `build_h3.py` exports hexagons
+- [x] deck.gl + kepler.gl installed (npm) + UMD-vendored into `web/lib/`
+- [x] Kepler.gl redux wiring + auto-load (fixed blank-page bug)
+- [x] Mapbox token in `.env` + `/config.js` runtime endpoint
+- [x] Phase 2 COG (`make_cog.py`)
+- [x] git init, 2 commits on `main`, remote = GIS2026
+
+---
+
+## 5. Tasks — TODO ⬜ (prioritized)
+
+**Blocked / needs user**
+- [ ] **Push to GitHub** — needs a Personal Access Token (§8), or user pushes manually
+- [ ] **GCS upload** — push DEM/GeoJSON/COG to `gs://www.geoglypha1.org`
+
+**Next build steps (unblocked)**
+- [ ] **Deck.gl `TerrainLayer`** from `dem_cog.tif` (real 3D terrain, needs a terrain-RGB or `raster-dem` source; see `MODERN_GIS_STACK.md` Phase 3)
+- [ ] **CesiumJS globe** (`web/cesium.html`, Apache-2.0; self-host terrain to stay tokenless)
+- [ ] **PMTiles / vector tiles** for POIs (tippecanoe) once data grows
+- [ ] **GeoParquet** export so DuckDB + GeoPandas share one format
+- [ ] `.env.example` (document keys with placeholders) — *created in this session*
+- [ ] Kepler.gl auto-load polish: verify `addDataToMap` point layer renders as expected in browser
+
+**Nice-to-have**
+- [ ] One `web/index.html` landing page linking all demos
+- [ ] Docker compose (verify sandbox allows Docker first)
+- [ ] Vendor script to rebuild `web/lib/` from npm (reproducibility)
+
+---
+
+## 6. File map
+
+```
+DSHtest/
+├── .env                      # SECRETS (git-ignored)
+├── .gitignore
+├── WORKPLAN.md               # this file
+├── MODERN_GIS_STACK.md       # architecture/roadmap
+├── README.md                 # run instructions
+├── requirements.txt          # Python deps
+├── gis_common.py             # env loader + shared constants
+├── fetch_dem.py              # OpenTopo -> DEM
+├── fetch_pois.py             # SerpAPI -> POIs
+├── build_db.py               # DuckDB spatial
+├── build_h3.py               # H3 hexagons
+├── make_cog.py               # DEM -> COG
+├── make_web.py               # hillshade + Leaflet page
+├── serve_map.py              # static server + /config.js
+├── data/                     # tif, geojson, duckdb, summaries
+├── web/                      # html pages + lib/ (vendored) + geojson + png
+└── frontend/                 # package.json, node_modules (git-ignored),
+                              # smoke_kepler.cjs (jsdom test)
+```
+
+---
+
+## 7. Command cheat sheet
+
+```powershell
+# server (maps)
+.\.venv\Scripts\python.exe serve_map.py 8090
+
+# pipeline
+.\.venv\Scripts\python.exe fetch_dem.py --demtype SRTMGL1
+.\.venv\Scripts\python.exe fetch_pois.py --query "hiking trails near Mount Mitchell NC"
+.\.venv\Scripts\python.exe build_db.py
+.\.venv\Scripts\python.exe build_h3.py --res 8
+.\.venv\Scripts\python.exe make_cog.py
+.\.venv\Scripts\python.exe make_web.py
+
+# headless kepler.gl smoke test
+cd frontend; node smoke_kepler.cjs
+
+# git
+git status; git add -A; git commit -m "..."; git log --oneline
+```
+
+---
+
+## 8. Git / push status
+
+- Local: `main`, 2 commits (`dc51485`, `32d8731`), working tree clean.
+- Remote: `origin = https://github.com/Roylaffman/GIS2026.git` (public, empty).
+- **Push is blocked on authentication**: no credential stored in this sandbox,
+  and git's credential-manager helper cannot run here (snag #8).
+
+**To unblock (pick one):**
+- **A** — create a GitHub **Personal Access Token** (repo write scope), then I
+  run: `git push https://<TOKEN>@github.com/Roylaffman/GIS2026.git main`
+  (token used inline, not committed).
+- **B** — you push from your normal desktop shell (outside the harness):
+  `cd C:\Users\royla\Documents\DSHtest; git push -u origin main`.
