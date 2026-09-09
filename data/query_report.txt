@@ -1,0 +1,35 @@
+================================================================
+GIS analysis - Mount Mitchell study area
+================================================================
+
+[DuckDB] tables:
+  - aoi
+  - pois
+  - pois_raw
+  - summit
+
+[DuckDB] POIs ingested: 20
+
+[DuckDB] POIs by source category:
+  Hiking area: 17
+  Scenic spot: 1
+  National forest: 1
+  State park: 1
+
+[DuckDB] nearest POIs to summit (haversine km):
+     0.05 km  Balsam Nature Trail
+     0.08 km  Old Mitchell Trailhead
+     0.28 km  Black Mountain Crest Trailhead
+      0.9 km  Mount Mitchell State Park
+     2.41 km  Old Mitchell Trailhead
+     3.51 km  Setrock Falls
+     3.77 km  Setrock Creek Falls
+     4.35 km  Mount Mitchell Trailhead
+
+[DuckDB] POIs inside the DEM tile AOI:
+  7 of 20 POIs lie inside the AOI box
+
+[DuckDB] summit point:
+  Mount Mitchell at (35.76490, -82.26510)
+
+[DuckDB] engine version: v1.5.5

@@ -1,0 +1,403 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.26336769999999,
+     35.772837599999995
+    ]
+   },
+   "properties": {
+    "name": "Mount Mitchell State Park",
+    "address": "2388 NC-128, Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 5440,
+    "type": "State park",
+    "place_id": "ChIJWXnXPt0GWogRk2rYG0MMDF0",
+    "phone": "(828) 675-4611",
+    "website": "http://www.ncparks.gov/mount-mitchell-state-park",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmlFxapb2qrPmWfFypt53kF5Ic9ODWww61mdqIN-nM4-CSMZSiFTgJokurr6lvteiOoX3Ifoj2OWhlujxGgxkgYOhS-jnFBBSaKx3cPhvwKiwZ8UuXvaVOHqFAf8I4uN6lpx9RdZg=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.1433417,
+     35.812353
+    ]
+   },
+   "properties": {
+    "name": "Crabtree Falls Trail",
+    "address": "39000 Blue Ridge Pkwy, Marion, NC 28752",
+    "rating": 4.8,
+    "reviews": 583,
+    "type": "Hiking area",
+    "place_id": "ChIJdRpYVbeoUIgRTvpSMxQw_eI",
+    "website": "https://www.nps.gov/blri/planyourvisit/crabtree-falls-trail.htm",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmd3rByDAUIp9sdiuj5lFdE-MCjdCKar9j8bgJIbHr4xd69WWVowteyxQkd4kj2nhNXH7bLezLtqrjc8i9_L_jv_41alYvaKm6ILxSgZ_qh3VWQ7sV5CX9ms3iz2fYjlin_S22J=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.3774134,
+     35.7032617
+    ]
+   },
+   "properties": {
+    "name": "Craggy Pinnacle Summit",
+    "address": "Barnardsville, NC 28709",
+    "rating": 4.9,
+    "reviews": 601,
+    "type": "Hiking area",
+    "place_id": "ChIJlTd3hsUCWogRotaQUyXcq_Q",
+    "phone": "(828) 298-5330",
+    "website": "http://www.blueridgeheritage.com/attractions-destinations/craggy-gardens",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmeUPmc4P4RManLVsBTojL3i5NIsJ4k1bqVUtfk-vxOb_QS7i6bXkv30rgoqo0-3fNONT-nNYLgg16InireiPNxR336q1nVdsGogVC6Dxb-ApQE_nL0pQzXZtkYsSfp8eMZniw=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2200335,
+     35.7510255
+    ]
+   },
+   "properties": {
+    "name": "Mount Mitchell Trailhead",
+    "address": "S Toe River Rd, Burnsville, NC 28714",
+    "rating": 4.7,
+    "reviews": 52,
+    "type": "Hiking area",
+    "place_id": "ChIJv1ZIq54BWogRN7psmCUes7o",
+    "phone": "(828) 380-6517",
+    "website": "http://www.fs.usda.gov/",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmDLpy4DEjRokSaQ_6j9NZBo_apb1Y7iiFNMcRK84sp3s5B8uqhMWfmY5yf3ZlDqHbZwsC0rZteZ3NmP0Qi0KWN25BOaNRP24CoeQH5UPJ6CxmfM3Pk056b_JbjZVlas-vwusiY=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2774482,
+     35.7456867
+    ]
+   },
+   "properties": {
+    "name": "Old Mitchell Trailhead",
+    "address": "24 Mt Mitchell Radio Station, Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 79,
+    "type": "Hiking area",
+    "place_id": "ChIJZ_ObFu8BWogRWrg20mD0wYE",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnmOG8ewoCrJVuFiw-6SfqPLTFTQrxIn8tRgmquAqmxQ1WzmQEtkdp8t9QSJ1HBxFeBqOB9eKpex6mK1ZIHvpQtprbMIQZcYie1eKQV-Zw7pz0t1BEghsRjIZ6-VlsYFusI9m4B=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.264794,
+     35.765281
+    ]
+   },
+   "properties": {
+    "name": "Balsam Nature Trail",
+    "address": "Mount Mitchell Summit Trail, Burnsville, NC 28714",
+    "rating": 5,
+    "reviews": 22,
+    "type": "Hiking area",
+    "place_id": "ChIJWVUnpt4HWogRSsGqQDgeAMA",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWl-bkUI5PcdJeIa15pYMNLI-Af0TvHn_258ARv5RYMskURmR0UvAjXNwx8Jzkyeb8grkm4S-F8JWaF0blo9vIg1eHftj5CpERsBg5B4k-LkPJPWrRrJGgLcj0EaZvMekfOEKs7Brg=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.1952975,
+     35.7684699
+    ]
+   },
+   "properties": {
+    "name": "Roaring Fork Falls Trailhead",
+    "address": "208 Busick Work Center Rd, Burnsville, NC 28714",
+    "rating": 4.8,
+    "reviews": 438,
+    "type": "Hiking area",
+    "place_id": "ChIJJzlf-uqpUIgRCXsBKATf3Qo",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWno7ZufeJwpOxoXc10zs0_ozo4YrrCmw5emtlfdr_p1KzAV-x_7HlGxY9OIMnrJspy7rfLRsyFscs9GZkuyc-E9sGgYI45KCqDIImVY3VZ9GyjBT-q-9jETk3lVU7u4_WPfA2Qd=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.3737129,
+     35.704177
+    ]
+   },
+   "properties": {
+    "name": "Craggy Pinnacle Trail",
+    "address": "3641 Blue Ridge Pkwy, Barnardsville, NC 28709",
+    "rating": 4.9,
+    "reviews": 1154,
+    "type": "Hiking area",
+    "place_id": "ChIJAcwTk8QCWogR_ZyYXMBCu4I",
+    "phone": "(828) 348-3400",
+    "website": "https://www.nps.gov/blri/planyourvisit/craggy-gradens-trail.htm",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnuqV2WMHvyDEoC2wCYgAYdNgpCbYW3uiL8iTBGTw7OCVdoE3kaSrkZ9mBqfGhe9xA6OnymJgn7U4vqZMUOl21XqvxiUEcMArYpss0fFmOYg78Y6YyJB4OEkE9KdCSGqTZnbCQt=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.34518899999999,
+     35.8021685
+    ]
+   },
+   "properties": {
+    "name": "Pisgah National Forest",
+    "address": "North Carolina",
+    "rating": 4.8,
+    "reviews": 14342,
+    "type": "National forest",
+    "place_id": "ChIJs-olvq4DWogRu5YJAWexJtI",
+    "phone": "(828) 257-4200",
+    "website": "https://www.fs.usda.gov/r08/northcarolina/recreation/pisgah-national-forest",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWk_hC6eMN_t06m_dXwdWUZVsKjMwOdazjfJrCHz8Oy15Mg0qEUvjc6UWGlA1C9Ugf7J4PI6ZYTvqcYMqd7u3k2sP1pTrFiC5srW_qaeT42EDghImGvrsKO7No7lk8LAu7T_ubqPWw=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2055863,
+     35.8064989
+    ]
+   },
+   "properties": {
+    "name": "Colbert Ridge Trail Head",
+    "address": "Burnsville, NC 28714",
+    "rating": 4.7,
+    "reviews": 23,
+    "type": "Hiking area",
+    "place_id": "ChIJG7brHiWoUIgR67bofO_xLR4",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmNE4S2vTYjsJ3He74zPdnm-eZPzIlpDzGaW_DzPi__NAnJpFwbel4XeMXVWIIcFa88TfjvP_ASRBBGV0J-IEd5z0heE3eiwT8-0Gf_Ul1Zlmg93dEICe1C_lb42JZST5UNbpU=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2646403,
+     35.7673531
+    ]
+   },
+   "properties": {
+    "name": "Black Mountain Crest Trailhead",
+    "address": "Black Mountain Crest Trail, Burnsville, NC 28714",
+    "rating": 4.8,
+    "reviews": 13,
+    "type": "Hiking area",
+    "place_id": "ChIJ3bI25DoHWogR3RZp7lhyNVU",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmUNL21cDhXqaU81dQCey5_d_ur8M82bdbfQ4wgF-BtJbpsRgeuwpZp64e3CqDbJ7bp6Q83YjjHR4quPNCpZ7HhP58TcUE_F9TYTWitGdZPTI8rGX_xDqudalRwUWR-tQuDJZlOdw=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.05671439999999,
+     35.7745799
+    ]
+   },
+   "properties": {
+    "name": "Toms Creek Falls Trail",
+    "address": "1250 Huskins Branch Rd, Marion, NC 28752",
+    "rating": 4.9,
+    "reviews": 1021,
+    "type": "Hiking area",
+    "place_id": "ChIJrQ9GtDCuUIgRebJZk0U3Z1M",
+    "website": "https://www.hdcarolina.com/episode/toms-creek-falls",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWng3NDOC7yv7RJzYjQAUPcg3EOCRLCp_DObuuydmHTPmb3vOZ_HjUAYFvTLonr7U-y6AiIBBVtJQczqrk3vv2gRhc8Q0-05vZnZsvNHTAb_cY4R_Ql-hlz_yBmWFZo4pDFtxebZ=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.39890559999999,
+     35.6999494
+    ]
+   },
+   "properties": {
+    "name": "Snowball Mountain Trail",
+    "address": "Unnamed Road, Barnardsville, NC 28709",
+    "rating": 4.8,
+    "reviews": 39,
+    "type": "Hiking area",
+    "place_id": "ChIJk7GpeTcdWogRpLtmY7IfD9Y",
+    "phone": "(828) 348-3400",
+    "website": "https://www.nps.gov/blri/planyourvisit/craggy-gradens-trail.htm",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmkFlgXjX8mlEMmAaNB_jGz-n7-rQWwMEaX_bAwpcYc606FsbN3bBipjS2kNNmoa5xc0vhr7XfOAiB58M0S_aX-4Yfcdii9LEqPWFikh7dxSkjcVCzzSlnlqu-M4GSoZ8KO5le1tA=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.23042099999999,
+     35.75063
+    ]
+   },
+   "properties": {
+    "name": "Setrock Falls",
+    "address": "Setrock Creek, Burnsville, NC 28714",
+    "rating": 4.5,
+    "reviews": 44,
+    "type": "Scenic spot",
+    "place_id": "ChIJJTU_RbMAWogRNfNHlmAECfg",
+    "phone": "(828) 289-5604",
+    "website": "https://www.hdcarolina.com/episode/setrock-creek-falls",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkiUdBBrSk3HtaADp2cSDHYVkBbayngLCY2fo8VfKY5uRihIuFkRmhRn84qlWEyjAfatbtQJODuvppzt9ngwejWaDiSA32WLE0YWlHkizveSD2JxVse1_f9Gj20GdpDkfidHVzy=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.22749069999999,
+     35.7501177
+    ]
+   },
+   "properties": {
+    "name": "Setrock Creek Falls",
+    "address": "Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 58,
+    "type": "Hiking area",
+    "place_id": "ChIJWX_pw7IAWogRjoicAuvwIxg",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnOvY2rnw2jTfjGT2YgbGFzslV4RV6C7YqL5ezIwVHgTQESyG2gYtbT6efqxyENBJyeUPl5y2FgvdZirN8RQytmUyhs1YC2Gkq3cSyokgHUVP4xiP6d58BO42THNPhTZgg_qeaX=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.37437779999999,
+     35.7287178
+    ]
+   },
+   "properties": {
+    "name": "Douglas Falls Trailhead",
+    "address": "State Rd 2173, Barnardsville, NC 28709",
+    "rating": 4.8,
+    "reviews": 69,
+    "type": "Hiking area",
+    "place_id": "ChIJ8Yb5LzsDWogR8NopWxJb1-k",
+    "phone": "(828) 257-4200",
+    "website": "https://www.fs.usda.gov/recarea/nfsnc/recreation/recarea/?recid=48532&actid=50",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn-WnXH5jI9MaVExtcECTloEom8tFbMetA4_XDwA1Dwrwy6j7fATkJwcVPP5uMlXD_lYBjnBpPy9o9MW5rAF-tHtEQFKcNaNPoZqIeXmpYdtMU_nDabmX-0v2_kn2ixmququ4o4=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.29003089999999,
+     35.6431385
+    ]
+   },
+   "properties": {
+    "name": "Lookout Mountain Trailhead",
+    "address": "99999 Lookout Rd, Black Mountain, NC 28711",
+    "rating": 4.9,
+    "reviews": 146,
+    "type": "Hiking area",
+    "place_id": "ChIJ-SITj9D_WYgRkdKxDXvpD2o",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnSd7QdgHY5XdvCjx85-SOYzLfPQ4KEfaY-V_Daqr7vWz5Voa5CxZ3ByyRsLUcGxJNU6LDkLXxpRJ06jl4reBVTMsli_xNuO25G3LUt81VU3sF9aFLSzDBX4JPfTw0fAyLNoXEG3Q=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.26537019999999,
+     35.7655941
+    ]
+   },
+   "properties": {
+    "name": "Old Mitchell Trailhead",
+    "address": "Mount Mitchell Summit Trail, Burnsville, NC 28714",
+    "rating": 5,
+    "reviews": 3,
+    "type": "Hiking area",
+    "place_id": "ChIJQWIHBzsHWogRPEEvfGAp7Gw",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWn76-0q3Xv57rvhNWDrY30PV8wgQFcU7NC2jYNp7GXxnRqotjLcCcEpBofp6RpXh0xQVCXv3TVC6iTxbU6tOm0uwhwyBexaqtC7IyEzwqbi8e76mXihUjrR3XhQptk6ZQpSmAA=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2958471,
+     35.6594201
+    ]
+   },
+   "properties": {
+    "name": "Graybeard Trail",
+    "address": "Black Mountain, NC 28711",
+    "rating": 4.7,
+    "reviews": 199,
+    "type": "Hiking area",
+    "place_id": "ChIJv6xVjFH_WYgREVyyd5glWnI",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWma6ujX5WLdahWrS0ebq9kGQ5MEtTg1z4gBRJdTynqwjMr9xaCIBEn1BYcs5hlH9rImrHF419Vqdp1GSiagoXPKyC-ZlfAB_XWf0kyoTT7H64YkC3moTcuxFZN6QR6ZXadApHM=w1000-h1000-c-n"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.219747,
+     35.838378899999995
+    ]
+   },
+   "properties": {
+    "name": "Woody Ridge Trailhead",
+    "address": "Burnsville, NC 28714",
+    "rating": 4.5,
+    "reviews": 21,
+    "type": "Hiking area",
+    "place_id": "ChIJVVNYJl8JWogRr2H7-Fr1Ivw",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnleg1kkPstZr4Hb5wnk5lApDJNQsA5ndYigNyohRtPwUf-M9Z1sF5DY040rxS2a7XhIapD3GGALeZin_uUsI0FEHwpm3DYaTUAEfH_2ycJp5NVv_XguGZdx3e58rOyEWzMUjzqfw=w1000-h1000-c-n"
+   }
+  }
+ ]
+}

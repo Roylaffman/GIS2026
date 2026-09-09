@@ -1,0 +1,22 @@
+{
+  "driver": "GTiff",
+  "crs": "GEOGCS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",SPHEROID[\"WGS 84\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST]]",
+  "size_px": [
+    288,
+    288
+  ],
+  "resolution_deg": [
+    0.0002777777777778146,
+    0.0002777777777778146
+  ],
+  "bounds": [
+    -82.30513888887596,
+    35.725138888885674,
+    -82.22513888887595,
+    35.805138888885686
+  ],
+  "min_elev_m": 937.0,
+  "max_elev_m": 2029.0,
+  "mean_elev_m": 1485.9298924575617,
+  "nodata": -32768.0
+}

@@ -1,0 +1,6 @@
+duckdb>=1.5
+rasterio>=1.4
+numpy>=2.0
+geopandas>=1.1
+h3>=4.5
+pyarrow>=25

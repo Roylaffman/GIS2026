@@ -1,0 +1,30 @@
+{
+ "type": "FeatureCollection",
+ "name": "https://serpapi.com/searches/r4nNwQGaBiyaYd_biNAzSDU8QspWn8qGykCkQhgYplE/6a9f60f7a688556e08a716d3.html",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.26336769999999,
+     35.772837599999995
+    ]
+   },
+   "properties": {
+    "name": "Mount Mitchell State Park",
+    "address": "2388 NC-128, Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 5440,
+    "type": [
+     "State park",
+     "Tourist attraction"
+    ],
+    "place_id": "ChIJWXnXPt0GWogRk2rYG0MMDF0",
+    "phone": "(828) 675-4611",
+    "website": "http://www.ncparks.gov/mount-mitchell-state-park",
+    "thumbnail": "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWm7YSYJvAcjoGizQxmHvT_S2tCSQti3XjWSqv467yRQCKODljF2AseIDDb0XsE6HKW91F7zI2c2kpLaHD1e75974rSZeUVGtOSVeicO2kHYcuxZWHBZoRSpW50jm_yCq-CEYbW7=w1000-h1000-c-n"
+   }
+  }
+ ]
+}

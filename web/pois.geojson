@@ -1,0 +1,27 @@
+{
+"type": "FeatureCollection",
+"name": "pois",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Mount Mitchell State Park", "address": "2388 NC-128, Burnsville, NC 28714", "rating": 4.9, "ptype": "State park" }, "geometry": { "type": "Point", "coordinates": [ -82.263367699999989, 35.7728376 ] } },
+{ "type": "Feature", "properties": { "name": "Crabtree Falls Trail", "address": "39000 Blue Ridge Pkwy, Marion, NC 28752", "rating": 4.8, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.1433417, 35.812353 ] } },
+{ "type": "Feature", "properties": { "name": "Craggy Pinnacle Summit", "address": "Barnardsville, NC 28709", "rating": 4.9, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.3774134, 35.7032617 ] } },
+{ "type": "Feature", "properties": { "name": "Mount Mitchell Trailhead", "address": "S Toe River Rd, Burnsville, NC 28714", "rating": 4.7, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2200335, 35.7510255 ] } },
+{ "type": "Feature", "properties": { "name": "Old Mitchell Trailhead", "address": "24 Mt Mitchell Radio Station, Burnsville, NC 28714", "rating": 4.9, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2774482, 35.7456867 ] } },
+{ "type": "Feature", "properties": { "name": "Balsam Nature Trail", "address": "Mount Mitchell Summit Trail, Burnsville, NC 28714", "rating": 5.0, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.264794, 35.765281 ] } },
+{ "type": "Feature", "properties": { "name": "Roaring Fork Falls Trailhead", "address": "208 Busick Work Center Rd, Burnsville, NC 28714", "rating": 4.8, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.1952975, 35.7684699 ] } },
+{ "type": "Feature", "properties": { "name": "Craggy Pinnacle Trail", "address": "3641 Blue Ridge Pkwy, Barnardsville, NC 28709", "rating": 4.9, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.3737129, 35.704177 ] } },
+{ "type": "Feature", "properties": { "name": "Pisgah National Forest", "address": "North Carolina", "rating": 4.8, "ptype": "National forest" }, "geometry": { "type": "Point", "coordinates": [ -82.345189, 35.8021685 ] } },
+{ "type": "Feature", "properties": { "name": "Colbert Ridge Trail Head", "address": "Burnsville, NC 28714", "rating": 4.7, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2055863, 35.8064989 ] } },
+{ "type": "Feature", "properties": { "name": "Black Mountain Crest Trailhead", "address": "Black Mountain Crest Trail, Burnsville, NC 28714", "rating": 4.8, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2646403, 35.7673531 ] } },
+{ "type": "Feature", "properties": { "name": "Toms Creek Falls Trail", "address": "1250 Huskins Branch Rd, Marion, NC 28752", "rating": 4.9, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.0567144, 35.7745799 ] } },
+{ "type": "Feature", "properties": { "name": "Snowball Mountain Trail", "address": "Unnamed Road, Barnardsville, NC 28709", "rating": 4.8, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.3989056, 35.6999494 ] } },
+{ "type": "Feature", "properties": { "name": "Setrock Falls", "address": "Setrock Creek, Burnsville, NC 28714", "rating": 4.5, "ptype": "Scenic spot" }, "geometry": { "type": "Point", "coordinates": [ -82.230421, 35.75063 ] } },
+{ "type": "Feature", "properties": { "name": "Setrock Creek Falls", "address": "Burnsville, NC 28714", "rating": 4.9, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2274907, 35.7501177 ] } },
+{ "type": "Feature", "properties": { "name": "Douglas Falls Trailhead", "address": "State Rd 2173, Barnardsville, NC 28709", "rating": 4.8, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.3743778, 35.7287178 ] } },
+{ "type": "Feature", "properties": { "name": "Lookout Mountain Trailhead", "address": "99999 Lookout Rd, Black Mountain, NC 28711", "rating": 4.9, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2900309, 35.6431385 ] } },
+{ "type": "Feature", "properties": { "name": "Old Mitchell Trailhead", "address": "Mount Mitchell Summit Trail, Burnsville, NC 28714", "rating": 5.0, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2653702, 35.7655941 ] } },
+{ "type": "Feature", "properties": { "name": "Graybeard Trail", "address": "Black Mountain, NC 28711", "rating": 4.7, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.2958471, 35.6594201 ] } },
+{ "type": "Feature", "properties": { "name": "Woody Ridge Trailhead", "address": "Burnsville, NC 28714", "rating": 4.5, "ptype": "Hiking area" }, "geometry": { "type": "Point", "coordinates": [ -82.219747, 35.8383789 ] } }
+]
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Mount Mitchell — Deck.gl demo</title>
+<link rel="stylesheet" href="lib/maplibre-gl.css"/>
+<style>
+  html,body,#map{height:100%;margin:0}
+  #panel{position:absolute;z-index:1000;top:10px;left:10px;background:rgba(255,255,255,.92);
+         padding:10px 14px;border-radius:8px;font:13px/1.5 Segoe UI,sans-serif;box-shadow:0 1px 6px rgba(0,0,0,.3);
+         max-width:300px}
+  #panel h1{font-size:15px;margin:0 0 4px}
+  #tooltip{position:absolute;z-index:1001;background:rgba(0,0,0,.82);color:#fff;padding:6px 9px;
+           border-radius:5px;font:12px/1.4 Segoe UI,sans-serif;pointer-events:none;display:none}
+</style>
+</head>
+<body>
+<div id="panel">
+  <h1>&#9962; Mount Mitchell — Deck.gl</h1>
+  <div><b>Layers:</b> MapLibre basemap · H3 hexagons (POI density) · POI scatterplot</div>
+  <div style="margin-top:4px;color:#555">Hover a hexagon / dot for details. Built with
+  open-source <a href="https://deck.gl" target="_blank">Deck.gl</a> + H3.</div>
+</div>
+<div id="tooltip"></div>
+<div id="map"></div>
+
+<script src="lib/maplibre-gl.js"></script>
+<script src="lib/deck.gl.min.js"></script>
+<script>
+const { Deck, MapboxOverlay, ScatterplotLayer, GeoJsonLayer } = deck;
+const SUMMIT = [-82.2651, 35.7649];
+
+const map = new maplibregl.Map({
+  container: 'map',
+  style: {
+    version: 8,
+    sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256 } },
+    layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+  },
+  center: SUMMIT,
+  zoom: 12,
+  pitch: 45
+});
+map.addControl(new maplibregl.NavigationControl());
+
+const overlay = new MapboxOverlay({ interleaved: true });
+map.addControl(overlay);
+
+let tooltipTimer = null;
+const tip = document.getElementById('tooltip');
+function showTip(x, y, html) {
+  tip.innerHTML = html; tip.style.display = 'block';
+  tip.style.left = (x + 12) + 'px'; tip.style.top = (y + 12) + 'px';
+}
+
+// H3 hexagons from DuckDB/H3 pipeline
+fetch('h3_hexagons.geojson').then(r => r.json()).then(hexFC => {
+  // POI scatterplot points
+  fetch('pois.geojson').then(r => r.json()).then(poiFC => {
+    const layers = [
+      new GeoJsonLayer({
+        id: 'h3-hexagons',
+        data: hexFC,
+        opacity: 0.55,
+        stroked: true,
+        filled: true,
+        extruded: true,
+        wireframe: true,
+        getElevation: f => (f.properties.count || 0) * 250,
+        getFillColor: f => {
+          const c = f.properties.count || 0;
+          return c >= 2 ? [230, 57, 70, 220] : [69, 117, 180, 180];
+        },
+        getLineColor: [255, 255, 255, 140],
+        pickable: true,
+        onHover: info => {
+          const el = document.getElementById('tooltip');
+          if (info.object) {
+            const p = info.object.properties;
+            showTip(info.x, info.y,
+              `<b>${p.count} POI(s)</b><br/>mean rating ${(p.mean_rating||0).toFixed(2)}<br/>${p.category||''}`);
+          } else { el.style.display = 'none'; }
+        }
+      }),
+      new ScatterplotLayer({
+        id: 'poi-points',
+        data: poiFC.features,
+        radiusScale: 20,
+        radiusMinPixels: 4,
+        getPosition: f => f.geometry.coordinates,
+        getFillColor: [255, 165, 0, 230],
+        getLineColor: [255, 255, 255, 200],
+        lineWidthMinPixels: 1,
+        pickable: true,
+        onHover: info => {
+          if (info.object) {
+            const p = info.object.properties;
+            const rate = p.rating ? ` \u2605 ${p.rating}` : '';
+            showTip(info.x, info.y, `<b>${p.name}</b>${rate}<br/>${p.address||''}`);
+          }
+        }
+      })
+    ];
+    overlay.setProps({ layers });
+  });
+});
+</script>
+</body>
+</html>

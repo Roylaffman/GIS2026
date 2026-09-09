@@ -1,0 +1,7 @@
+{
+  "resolution": 8,
+  "n_hexagons": 17,
+  "n_pois": 20,
+  "max_count": 2,
+  "hexagons_with_1_poi": 14
+}

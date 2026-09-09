@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mount Mitchell DEM + POIs (DSHtest)</title>
+<link rel="stylesheet" href="lib/leaflet.css"/>
+<style>
+  html,body,#map{height:100%;margin:0}
+  #panel{position:absolute;z-index:1000;top:10px;right:10px;background:rgba(255,255,255,.92);
+         padding:10px 14px;border-radius:8px;font:13px/1.5 Segoe UI,sans-serif;box-shadow:0 1px 6px rgba(0,0,0,.3);
+         max-width:280px}
+  #panel h1{font-size:15px;margin:0 0 4px}
+  #panel code{background:#eee;padding:1px 4px;border-radius:3px}
+  .lbl{font-weight:600}
+  #poi-count{color:#1565c0;font-weight:600}
+</style>
+</head>
+<body>
+<div id="panel">
+  <h1>&#9962; Mount Mitchell DEM demo</h1>
+  <div><span class="lbl">DEM:</span> SRTMGL1 30&nbsp;m (OpenTopography)</div>
+  <div><span class="lbl">Points:</span> Google Maps via SerpAPI</div>
+  <div><span class="lbl">Stack:</span> OpenTopo &#8594; SerpAPI &#8594; DuckDB &#8594; Leaflet</div>
+  <div style="margin-top:6px;color:#555">Hillshade overlay + POI markers.<br/>
+  Click a marker for details.</div>
+  <div style="margin-top:6px"><span class="lbl">POIs loaded:</span> <span id="poi-count">…</span></div>
+  <div style="margin-top:8px;border-top:1px solid #ddd;padding-top:6px">
+    <b>Other demos:</b><br/>
+    <a href="deck.html">Deck.gl (hexagons + 3D)</a><br/>
+    <a href="kepler.html">Kepler.gl (explore)</a>
+  </div>
+</div>
+<div id="map"></div>
+<script src="lib/leaflet.js"></script>
+<script>
+const POIS = {"type": "FeatureCollection", "name": "pois", "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}}, "features": [{"type": "Feature", "properties": {"name": "Mount Mitchell State Park", "address": "2388 NC-128, Burnsville, NC 28714", "rating": 4.9, "ptype": "State park"}, "geometry": {"type": "Point", "coordinates": [-82.26336769999999, 35.7728376]}}, {"type": "Feature", "properties": {"name": "Crabtree Falls Trail", "address": "39000 Blue Ridge Pkwy, Marion, NC 28752", "rating": 4.8, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.1433417, 35.812353]}}, {"type": "Feature", "properties": {"name": "Craggy Pinnacle Summit", "address": "Barnardsville, NC 28709", "rating": 4.9, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.3774134, 35.7032617]}}, {"type": "Feature", "properties": {"name": "Mount Mitchell Trailhead", "address": "S Toe River Rd, Burnsville, NC 28714", "rating": 4.7, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2200335, 35.7510255]}}, {"type": "Feature", "properties": {"name": "Old Mitchell Trailhead", "address": "24 Mt Mitchell Radio Station, Burnsville, NC 28714", "rating": 4.9, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2774482, 35.7456867]}}, {"type": "Feature", "properties": {"name": "Balsam Nature Trail", "address": "Mount Mitchell Summit Trail, Burnsville, NC 28714", "rating": 5.0, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.264794, 35.765281]}}, {"type": "Feature", "properties": {"name": "Roaring Fork Falls Trailhead", "address": "208 Busick Work Center Rd, Burnsville, NC 28714", "rating": 4.8, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.1952975, 35.7684699]}}, {"type": "Feature", "properties": {"name": "Craggy Pinnacle Trail", "address": "3641 Blue Ridge Pkwy, Barnardsville, NC 28709", "rating": 4.9, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.3737129, 35.704177]}}, {"type": "Feature", "properties": {"name": "Pisgah National Forest", "address": "North Carolina", "rating": 4.8, "ptype": "National forest"}, "geometry": {"type": "Point", "coordinates": [-82.345189, 35.8021685]}}, {"type": "Feature", "properties": {"name": "Colbert Ridge Trail Head", "address": "Burnsville, NC 28714", "rating": 4.7, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2055863, 35.8064989]}}, {"type": "Feature", "properties": {"name": "Black Mountain Crest Trailhead", "address": "Black Mountain Crest Trail, Burnsville, NC 28714", "rating": 4.8, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2646403, 35.7673531]}}, {"type": "Feature", "properties": {"name": "Toms Creek Falls Trail", "address": "1250 Huskins Branch Rd, Marion, NC 28752", "rating": 4.9, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.0567144, 35.7745799]}}, {"type": "Feature", "properties": {"name": "Snowball Mountain Trail", "address": "Unnamed Road, Barnardsville, NC 28709", "rating": 4.8, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.3989056, 35.6999494]}}, {"type": "Feature", "properties": {"name": "Setrock Falls", "address": "Setrock Creek, Burnsville, NC 28714", "rating": 4.5, "ptype": "Scenic spot"}, "geometry": {"type": "Point", "coordinates": [-82.230421, 35.75063]}}, {"type": "Feature", "properties": {"name": "Setrock Creek Falls", "address": "Burnsville, NC 28714", "rating": 4.9, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2274907, 35.7501177]}}, {"type": "Feature", "properties": {"name": "Douglas Falls Trailhead", "address": "State Rd 2173, Barnardsville, NC 28709", "rating": 4.8, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.3743778, 35.7287178]}}, {"type": "Feature", "properties": {"name": "Lookout Mountain Trailhead", "address": "99999 Lookout Rd, Black Mountain, NC 28711", "rating": 4.9, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2900309, 35.6431385]}}, {"type": "Feature", "properties": {"name": "Old Mitchell Trailhead", "address": "Mount Mitchell Summit Trail, Burnsville, NC 28714", "rating": 5.0, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2653702, 35.7655941]}}, {"type": "Feature", "properties": {"name": "Graybeard Trail", "address": "Black Mountain, NC 28711", "rating": 4.7, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.2958471, 35.6594201]}}, {"type": "Feature", "properties": {"name": "Woody Ridge Trailhead", "address": "Burnsville, NC 28714", "rating": 4.5, "ptype": "Hiking area"}, "geometry": {"type": "Point", "coordinates": [-82.219747, 35.8383789]}}]};
+const DEM_BOUNDS = [[35.725138888885674,-82.30513888887596],[35.805138888885686,-82.22513888887595]];
+const SUMMIT = [35.7649,-82.2651];
+const map = L.map('map').setView(SUMMIT, 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19, attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+L.imageOverlay('dem_hillshade.png', DEM_BOUNDS, {opacity: 0.75}).addTo(map);
+L.rectangle(DEM_BOUNDS, {color:'#b71c1c', weight:1.5, fill:false}).addTo(map)
+ .bindPopup('<b>SRTMGL1 DEM tile</b><br/>'+JSON.stringify(DEM_BOUNDS.flat().map(b=>b.toFixed(5))));
+const summitIcon = L.divIcon({html:'&#9878;', className:'', iconSize:[18,18],
+  iconAnchor:[9,9], popupAnchor:[0,-12]});
+L.marker(SUMMIT, {icon: summitIcon}).addTo(map)
+ .bindPopup('<b>Mount Mitchell</b><br/>2,037&nbsp;m (6,684&nbsp;ft) - highest point east of the Mississippi');
+
+const features = POIS.features || [];
+const layer = L.geoJSON(features, {
+  pointToLayer: (f,ll)=> L.circleMarker(ll, {radius:7, color:'#fff', weight:2, fillColor:'#1565c0', fillOpacity:.9}),
+  onEachFeature: (f,l)=>{
+    const p=f.properties||{};
+    const rate=p.rating?` &#9733; ${p.rating}`:'';
+    l.bindPopup(`<b>${p.name||'?'}</b>${rate}<br/>${p.address||''}<br/><span style="color:#888">${p.ptype||''}</span>`);
+  }
+}).addTo(map);
+const n = layer.getLayers().length;
+document.getElementById('poi-count').textContent = n;
+if (n === 0) {
+  const el=document.createElement('div');
+  el.style.cssText='position:absolute;z-index:2000;bottom:10px;left:10px;background:#b71c1c;color:#fff;padding:6px 10px;border-radius:6px;font:12px sans-serif';
+  el.textContent='Warning: 0 POIs found in page data (check data/pois.geojson)';
+  document.body.appendChild(el);
+}
+</script>
+</body>
+</html>
