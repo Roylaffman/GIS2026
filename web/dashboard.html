@@ -159,6 +159,7 @@
     }
 
     // ---- stats from profile + layers ----
+    const statsHtml = [];
     if (profile) {
       statsHtml.push(`<div class="stat">Elevation: <b>${profile.min}–${profile.max} m</b></div>`);
       statsHtml.push(`<div class="stat">Transect: <b>${profile.distances[profile.distances.length - 1]} km</b></div>`);
