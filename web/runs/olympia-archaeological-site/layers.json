@@ -1,0 +1,17 @@
+{
+  "layers": [
+    {
+      "id": "dem-extent",
+      "label": "DEM extent",
+      "type": "line",
+      "file": "dem_extent.geojson",
+      "color": "#b71c1c",
+      "width": 1.5,
+      "dash": [
+        2,
+        2
+      ],
+      "visible": false
+    }
+  ]
+}

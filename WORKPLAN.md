@@ -128,6 +128,12 @@ These bit us and will bite again — **do not rediscover them**:
   earthwork volume for terrain). Writes slope/aspect GeoTIFFs, hillshade PNG,
   profile JSON, histogram JSON, report JSON. Verified: Mount Mitchell 64.2 km² /
   95.5 Gm³; synthetic 120 m-deep lake → 125 Mm³ water (paraboloid-correct).
+- **GREECE dataset** — `fetch_greece.py` pulls SRTMGL1 DEMs around 8 ancient
+  sites (Acropolis, Delphi, Olympia, Knossos, Delos, Akrotiri, Mycenae,
+  Epidaurus) via Nominatim geocoding + OpenTopo, each as a full quickmap run
+  (terrain + dashboard). Plus **Aegean bathymetry** from EMODnet WCS (no key,
+  Cyclades 24.5–26.5°E × 36–38°N, 1600×1600, −1921..1025 m, 93% sea) — overlaps
+  the island sites. All 10 runs live in the hub.
 - **Remote push** — pushed to `github.com/Roylaffman/GIS2026` (done by user, verified in sync)
 
 ---
@@ -200,6 +206,7 @@ DSHtest/
 ├── make_web.py               # hillshade + Leaflet page
 ├── inspect_data.py           # vector data QA/inspection CLI
 ├── analyze_dem.py            # DEM + bathymetry analysis CLI
+├── fetch_greece.py           # Greek sites DEMs + Aegean bathymetry
 ├── make_sample_bathy.py      # synthetic bathymetry test fixture
 ├── serve_map.py              # static server + /config.js (any depth)
 ├── data/                     # tif, geojson, duckdb, summaries
