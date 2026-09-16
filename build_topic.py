@@ -1,8 +1,8 @@
 """build_topic.py — turn a topic JSON into a self-contained, Quarto-embeddable
-MapLibre webmap (with Source Quality Legend + References).
+webmap (with Source Quality Legend + References).
 
 A "topic" is one JSON file describing layers + provenance (see
-TOPIC_WEBMAP_PLAN.md §2). This script:
+docs/TOPIC_WEBMAP_PLAN.md §2). This script:
   1. validates the schema
   2. copies each layer's data file into web/topics/<slug>/
   3. for raster layers with a `dem` source, colorizes it into XYZ tiles

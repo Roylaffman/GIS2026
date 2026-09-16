@@ -14,7 +14,20 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-API keys live in `.env` (already populated; `.env` is git-ignored).
+API keys live in `.env` (git-ignored). Required keys are documented in
+`.env.example`.
+
+## Documentation
+
+All project docs live in **[`docs/`](docs/)** — see [`docs/README.md`](docs/README.md) for the index.
+
+| Doc | What it covers |
+|-----|----------------|
+| [`docs/WORKPLAN.md`](docs/WORKPLAN.md) | **Start here** — project state, done/todo, environment, harness snags, command cheat sheet |
+| [`docs/MODERN_GIS_STACK.md`](docs/MODERN_GIS_STACK.md) | Architecture & roadmap (GDAL/GeoPandas/DuckDB/H3 + Deck.gl/Kepler.gl/Cesium) |
+| [`docs/TOPIC_WEBMAP_PLAN.md`](docs/TOPIC_WEBMAP_PLAN.md) | "Topic → webmap" system; **Mapbox GL JS primary renderer**; Quarto embedding |
+| [`docs/DSH_WorkingGuide.md`](docs/DSH_WorkingGuide.md) | DeepSeek Harness itself — commands, rebuild rules, workspace setup |
+
 
 ## Pipeline steps
 
@@ -42,12 +55,29 @@ API keys live in `.env` (already populated; `.env` is git-ignored).
 - DuckDB spatial `ST_Read('file.geojson')` flattens GeoJSON properties into
   columns (geometry column named `geom`); `build_db.py` renames dynamically.
 
-## DEM → browser note
+## More than the Mount Mitchell demo
 
-This demo shows the DEM as a **hillshade raster overlay** in Leaflet
-(GDAL/numpy-rendered PNG). For true 3D terrain (MapLibre GL / Mapbox GL
-`raster-dem` decoding of terrain-RGB tiles) say the word and the next step is
-a terrain-RGB tile pyramid served to a MapLibre page.
+This repo has grown well past the original demo. Current capabilities:
+
+- **`quickmap.py`** — one command turns a place into a full map set (DEM +
+  terrain + POIs + H3 + dashboard) under `web/runs/<slug>/`; hub at `/runs.html`.
+- **`build_topic.py`** — turns a *topic* JSON into an embeddable webmap with a
+  **Source Quality Legend** + references (see `docs/TOPIC_WEBMAP_PLAN.md`).
+- **`inspect_data.py`** — QA any vector dataset (fields, CRS, bounds, nulls).
+- **`analyze_dem.py`** — DEM **and bathymetry** analysis (stats, hypsometry,
+  volume, slope/aspect/hillshade).
+- **`make_terrain.py` / `make_bathymetry.py`** — terrain-RGB tiles and
+  colorized depth tiles for 3D terrain / bathymetry overlays.
+- **Map pages:** `/` (Leaflet), `/deck.html` (Deck.gl 3D), `/kepler.html`,
+  `/dashboard.html`, `/topic.html` — all parameterized by `?run=` / `?topic=`.
+
+## DEM → browser
+
+3D terrain works: `make_terrain.py` writes terrain-RGB XYZ tiles and the
+Deck.gl/dashboard pages render them via a `raster-dem` source + `setTerrain`
+with hillshade. Bathymetry is colorized into tiles by `make_bathymetry.py`.
+Per the renderer decision in `docs/TOPIC_WEBMAP_PLAN.md` §0, **Mapbox GL JS is
+the primary engine for the main/topic maps** (3D terrain + coded-in GeoJSON).
 
 ## Querying the DB directly
 

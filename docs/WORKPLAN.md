@@ -2,8 +2,9 @@
 
 > Single source of truth for this project: **what's done, what's next, what's
 > installed, and every harness snag we hit** (so tomorrow starts fast).
-> Companion to `MODERN_GIS_STACK.md` (the *architecture* plan) and `README.md`
-> (the *how-to-run*).
+> Companion to `docs/MODERN_GIS_STACK.md` (the *architecture* plan) and
+> `README.md` (the *how-to-run*). All project docs live in `docs/` — see
+> `docs/README.md` for the index.
 
 **Project:** Mount Mitchell, NC GIS pipeline — OpenTopography DEM → SerpAPI
 POIs → DuckDB (spatial) → H3 → Leaflet / Deck.gl / Kepler.gl web maps.
@@ -89,7 +90,7 @@ These bit us and will bite again — **do not rediscover them**:
   Uses `MAPBOX_TOKEN` (in `.env`, served via `/config.js`).
 - **MapLibre GL / Deck.gl / Kepler.gl / Leaflet / Cesium** are used when the task
   calls for them (tokenless fallback, big-data overlays, quick exploration,
-  static maps, globe). See `TOPIC_WEBMAP_PLAN.md` §0 for the full table.
+  static maps, globe). See `docs/TOPIC_WEBMAP_PLAN.md` §0 for the full table.
 
 ---
 
@@ -205,18 +206,24 @@ These bit us and will bite again — **do not rediscover them**:
 DSHtest/
 ├── .env                      # SECRETS (git-ignored)
 ├── .gitignore
-├── WORKPLAN.md               # this file
-├── MODERN_GIS_STACK.md       # architecture/roadmap
-├── README.md                 # run instructions
+├── README.md                 # run instructions (stays at root)
+├── docs/                     # ALL project documentation
+│   ├── README.md             # docs index
+│   ├── WORKPLAN.md           # this file (state + roadmap)
+│   ├── MODERN_GIS_STACK.md   # architecture/roadmap
+│   ├── TOPIC_WEBMAP_PLAN.md  # topic -> webmap plan (Mapbox GL primary)
+│   └── DSH_WorkingGuide.md   # DeepSeek Harness working guide
 ├── requirements.txt          # Python deps
 ├── gis_common.py             # env loader + shared constants
 ├── quickmap.py               # **quick-maps system** (place -> run folder)
+├── build_topic.py            # topic JSON -> webmap (quality legend + refs)
 ├── fetch_dem.py              # OpenTopo -> DEM
 ├── fetch_pois.py             # SerpAPI -> POIs
 ├── build_db.py               # DuckDB spatial
 ├── build_h3.py               # H3 hexagons
 ├── make_cog.py               # DEM -> COG
 ├── make_terrain.py           # DEM -> terrain-RGB XYZ tiles + terrain.json
+├── make_bathymetry.py        # depth raster -> colorized tiles + colormap
 ├── make_dashboard.py         # run -> layers.json manifest + real DEM profile.json
 ├── make_web.py               # hillshade + Leaflet page
 ├── inspect_data.py           # vector data QA/inspection CLI
@@ -224,17 +231,20 @@ DSHtest/
 ├── fetch_greece.py           # Greek sites DEMs + Aegean bathymetry
 ├── make_sample_bathy.py      # synthetic bathymetry test fixture
 ├── serve_map.py              # static server + /config.js (any depth)
+├── topics/                   # topic JSON definitions (source)
 ├── data/                     # tif, geojson, duckdb, summaries
 ├── web/
 │   ├── index.html            # Mount Mitchell Leaflet demo
 │   ├── deck.html             # parameterized Deck.gl (?run=<slug>)
 │   ├── kepler.html           # parameterized Kepler.gl (?run=<slug>)
 │   ├── dashboard.html        # parameterized dashboard (terrain+layers+profile)
+│   ├── topic.html            # parameterized topic map (?topic=<slug>)
 │   ├── runs.html             # hub listing all quick-map runs
 │   ├── runs/                 # one folder per quick map + index.json
 │   │   ├── index.json
 │   │   └── <slug>/{run.json, pois.geojson, h3_hexagons.geojson, dem.tif, dem_cog.tif,
 │   │               terrain.json, tiles/{z}/{x}/{y}.png}
+│   ├── topics/<slug>/        # built topics (topic.json + layers + tiles)
 │   ├── lib/                  # vendored UMD bundles (committed)
 │   ├── tiles/ + terrain.json # root demo terrain
 │   └── dem_hillshade.png, *.geojson   # root demo assets
