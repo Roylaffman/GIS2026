@@ -1,0 +1,123 @@
+{
+  "title": "Aegean Cyclades \u2014 Seafloor & Ancient Islands",
+  "subtitle": "Bathymetry (EMODnet) with Delos and Santorini/Akrotiri extents",
+  "center": [
+    25.5,
+    37.0
+  ],
+  "zoom": 8,
+  "basemap": "dark",
+  "attribution": "Bathymetry \u00a9 EMODnet; island DEMs SRTM via OpenTopography.",
+  "quality_legend": [
+    {
+      "tag": "Gov.",
+      "color": "#377eb8",
+      "meaning": "Government / public-agency data, publicly audited",
+      "examples": "EMODnet (EU), USGS"
+    },
+    {
+      "tag": "Computed",
+      "color": "#7570b3",
+      "meaning": "Derived in this project (tiling, colorization, extent)",
+      "examples": "terrain-RGB tiles, colorized depth"
+    },
+    {
+      "tag": "Peer-rev.",
+      "color": "#1b9e77",
+      "meaning": "Peer-reviewed journal / curated database",
+      "examples": "published bathymetric compilations"
+    }
+  ],
+  "layers": [
+    {
+      "id": "bathymetry",
+      "label": "Aegean bathymetry",
+      "type": "raster",
+      "dem": "data/greece/aegean_cyclades_bathymetry.tif",
+      "opacity": 0.85,
+      "quality": "Gov.",
+      "source_name": "EMODnet Bathymetry",
+      "source_url": "https://emodnet.ec.europa.eu/en/bathymetry",
+      "visible": true,
+      "tiles": "bathy_tiles/{z}/{x}/{y}.png",
+      "colormap": [
+        {
+          "value": 0.0,
+          "color": "#7ec8e3"
+        },
+        {
+          "value": -10.0,
+          "color": "#56b4e9"
+        },
+        {
+          "value": -50.0,
+          "color": "#1e88e5"
+        },
+        {
+          "value": -200.0,
+          "color": "#1565c0"
+        },
+        {
+          "value": -500.0,
+          "color": "#0d47a1"
+        },
+        {
+          "value": -1000.0,
+          "color": "#002171"
+        },
+        {
+          "value": -2000.0,
+          "color": "#000828"
+        }
+      ],
+      "depth_min": -1920.8,
+      "depth_max": 1025.2
+    },
+    {
+      "id": "delos-extent",
+      "label": "Delos extent",
+      "type": "line",
+      "file": "delos-extent.geojson",
+      "color": "#ffab00",
+      "width": 1.6,
+      "dash": [
+        2,
+        2
+      ],
+      "quality": "Computed",
+      "source_name": "SRTM / OpenTopography",
+      "source_url": "https://opentopography.org",
+      "visible": true
+    },
+    {
+      "id": "akrotiri-extent",
+      "label": "Santorini (Akrotiri) extent",
+      "type": "line",
+      "file": "akrotiri-extent.geojson",
+      "color": "#ff6d00",
+      "width": 1.6,
+      "dash": [
+        2,
+        2
+      ],
+      "quality": "Computed",
+      "source_name": "SRTM / OpenTopography",
+      "source_url": "https://opentopography.org",
+      "visible": true
+    }
+  ],
+  "references": [
+    {
+      "text": "EMODnet Bathymetry Consortium. 2022. EMODnet Digital Bathymetry (DTM). European Marine Observation and Data Network.",
+      "url": "https://emodnet.ec.europa.eu/en/bathymetry"
+    },
+    {
+      "text": "OpenTopography. SRTM GL1 30m elevation data.",
+      "url": "https://opentopography.org"
+    },
+    {
+      "text": "GEBCO Compilation Group. 2023. GEBCO_2023 Grid. (contextual global bathymetry).",
+      "url": "https://www.gebco.net"
+    }
+  ]
+}

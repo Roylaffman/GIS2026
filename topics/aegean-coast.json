@@ -1,0 +1,57 @@
+{
+  "title": "Aegean Cyclades — Seafloor & Ancient Islands",
+  "subtitle": "Bathymetry (EMODnet) with Delos and Santorini/Akrotiri extents",
+  "center": [25.5, 37.0],
+  "zoom": 8,
+  "basemap": "dark",
+  "attribution": "Bathymetry © EMODnet; island DEMs SRTM via OpenTopography.",
+  "quality_legend": [
+    { "tag": "Gov.", "color": "#377eb8", "meaning": "Government / public-agency data, publicly audited", "examples": "EMODnet (EU), USGS" },
+    { "tag": "Computed", "color": "#7570b3", "meaning": "Derived in this project (tiling, colorization, extent)", "examples": "terrain-RGB tiles, colorized depth" },
+    { "tag": "Peer-rev.", "color": "#1b9e77", "meaning": "Peer-reviewed journal / curated database", "examples": "published bathymetric compilations" }
+  ],
+  "layers": [
+    {
+      "id": "bathymetry",
+      "label": "Aegean bathymetry",
+      "type": "raster",
+      "dem": "data/greece/aegean_cyclades_bathymetry.tif",
+      "opacity": 0.85,
+      "quality": "Gov.",
+      "source_name": "EMODnet Bathymetry",
+      "source_url": "https://emodnet.ec.europa.eu/en/bathymetry",
+      "visible": true
+    },
+    {
+      "id": "delos-extent",
+      "label": "Delos extent",
+      "type": "line",
+      "file": "web/runs/delos-island/dem_extent.geojson",
+      "color": "#ffab00",
+      "width": 1.6,
+      "dash": [2, 2],
+      "quality": "Computed",
+      "source_name": "SRTM / OpenTopography",
+      "source_url": "https://opentopography.org",
+      "visible": true
+    },
+    {
+      "id": "akrotiri-extent",
+      "label": "Santorini (Akrotiri) extent",
+      "type": "line",
+      "file": "web/runs/akrotiri/dem_extent.geojson",
+      "color": "#ff6d00",
+      "width": 1.6,
+      "dash": [2, 2],
+      "quality": "Computed",
+      "source_name": "SRTM / OpenTopography",
+      "source_url": "https://opentopography.org",
+      "visible": true
+    }
+  ],
+  "references": [
+    { "text": "EMODnet Bathymetry Consortium. 2022. EMODnet Digital Bathymetry (DTM). European Marine Observation and Data Network.", "url": "https://emodnet.ec.europa.eu/en/bathymetry" },
+    { "text": "OpenTopography. SRTM GL1 30m elevation data.", "url": "https://opentopography.org" },
+    { "text": "GEBCO Compilation Group. 2023. GEBCO_2023 Grid. (contextual global bathymetry).", "url": "https://www.gebco.net" }
+  ]
+}
