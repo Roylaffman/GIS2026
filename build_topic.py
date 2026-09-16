@@ -96,12 +96,32 @@ def build_topic(topic_path: Path) -> str:
             print(f"  layer {l['id']}: {dst.name}")
 
     # terrain
-    if topic.get("terrain") and topic["terrain"].get("dem"):
-        dem = resolve_path(topic["terrain"]["dem"], topic_dir)
-        from make_terrain import make_terrain
-        make_terrain(dem, out, min_zoom=8, max_zoom=13)
-        topic["terrain"]["tiles"] = "tiles/{z}/{x}/{y}.png"
-        print(f"  terrain tiles -> {out / 'tiles'}")
+    terr = topic.get("terrain")
+    if terr:
+        dem = None
+        if terr.get("grid"):
+            # fetch surrounding DEMs as an n x n grid around the topic center
+            from make_grid_dem import fetch_grid_dem
+            g = terr["grid"]
+            dem = fetch_grid_dem(topic["center"][1], topic["center"][0],
+                                 g.get("n", 4), g.get("cell", 0.08),
+                                 terr.get("demtype", "SRTMGL1"), out,
+                                 mode=g.get("mode", "single"))
+            # register the grid outline as a layer if not already present
+            if not any(l["id"] == "dem-grid" for l in topic["layers"]):
+                topic["layers"].append({
+                    "id": "dem-grid", "label": "DEM grid", "type": "line",
+                    "file": "grid.geojson", "color": "#ffffff", "width": 0.8,
+                    "dash": [2, 2], "opacity": 0.5, "quality": "Computed",
+                    "source_name": "SRTM / OpenTopography", "visible": True,
+                })
+        elif terr.get("dem"):
+            dem = resolve_path(terr["dem"], topic_dir)
+        if dem:
+            from make_terrain import make_terrain
+            make_terrain(dem, out, min_zoom=8, max_zoom=13)
+            terr["tiles"] = "tiles/{z}/{x}/{y}.png"
+            print(f"  terrain tiles -> {out / 'tiles'}")
 
     (out / "topic.json").write_text(json.dumps(topic, indent=2))
 

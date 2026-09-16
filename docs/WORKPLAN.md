@@ -180,6 +180,11 @@ These bit us and will bite again — **do not rediscover them**:
 - [x] **Mapbox GL JS primary renderer** — `web/topic-mapbox.html` (3D terrain +
       coded GeoJSON + Source Quality Legend + References + iframe embed);
       `web/topic.html` (MapLibre) retained as tokenless fallback
+- [x] **DEM grid (surrounding terrain)** — `make_grid_dem.py` fetches an n×n
+      grid of SRTM tiles around a center (single-fetch or literal mosaic) and
+      writes `grid_dem.tif` + `grid.geojson` outline; `build_topic.py` auto-adds
+      a `dem-grid` overlay layer. Mount Mitchell topic now covers a 4×4 grid
+      (0.32° box, 113 terrain tiles, 391–2029 m) vs the original single tile.
 - [x] Pushed to GitHub (user pushed; verified `origin/main` in sync)
 
 ---
@@ -234,6 +239,7 @@ DSHtest/
 ├── make_cog.py               # DEM -> COG
 ├── make_terrain.py           # DEM -> terrain-RGB XYZ tiles + terrain.json
 ├── make_bathymetry.py        # depth raster -> colorized tiles + colormap
+├── make_grid_dem.py          # fetch n x n surrounding DEM tiles + mosaic + grid.geojson
 ├── make_dashboard.py         # run -> layers.json manifest + real DEM profile.json
 ├── make_web.py               # hillshade + Leaflet page
 ├── inspect_data.py           # vector data QA/inspection CLI

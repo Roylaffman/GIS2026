@@ -14,7 +14,8 @@
     { "tag": "Gray lit.", "color": "#e6ab02", "meaning": "Commercial/aggregated listings — not authoritative", "examples": "Google Maps places via SerpAPI" }
   ],
   "terrain": {
-    "dem": "data/dem_mount_mitchell.tif",
+    "grid": { "n": 4, "cell": 0.08, "mode": "single" },
+    "demtype": "SRTMGL1",
     "exaggeration": 1.6,
     "hillshade": true,
     "hillshade_exaggeration": 0.4

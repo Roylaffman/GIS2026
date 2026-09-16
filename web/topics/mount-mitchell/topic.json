@@ -32,7 +32,12 @@
     }
   ],
   "terrain": {
-    "dem": "data/dem_mount_mitchell.tif",
+    "grid": {
+      "n": 4,
+      "cell": 0.08,
+      "mode": "single"
+    },
+    "demtype": "SRTMGL1",
     "exaggeration": 1.6,
     "hillshade": true,
     "hillshade_exaggeration": 0.4,
@@ -81,6 +86,22 @@
       "source_name": "SRTM / OpenTopography",
       "source_url": "https://opentopography.org",
       "visible": false
+    },
+    {
+      "id": "dem-grid",
+      "label": "DEM grid",
+      "type": "line",
+      "file": "grid.geojson",
+      "color": "#ffffff",
+      "width": 0.8,
+      "dash": [
+        2,
+        2
+      ],
+      "opacity": 0.5,
+      "quality": "Computed",
+      "source_name": "SRTM / OpenTopography",
+      "visible": true
     }
   ],
   "references": [
