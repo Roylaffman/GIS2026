@@ -1,0 +1,45 @@
+{
+  "encoding": "colorized",
+  "tiles": "bathy_tiles/{z}/{x}/{y}.png",
+  "tileSize": 256,
+  "bounds": [
+    24.5,
+    36.0,
+    26.5,
+    38.0
+  ],
+  "minzoom": 8,
+  "maxzoom": 12,
+  "depth_min": -1920.8,
+  "depth_max": 1025.2,
+  "colormap": [
+    {
+      "value": 0.0,
+      "color": "#7ec8e3"
+    },
+    {
+      "value": -10.0,
+      "color": "#56b4e9"
+    },
+    {
+      "value": -50.0,
+      "color": "#1e88e5"
+    },
+    {
+      "value": -200.0,
+      "color": "#1565c0"
+    },
+    {
+      "value": -500.0,
+      "color": "#0d47a1"
+    },
+    {
+      "value": -1000.0,
+      "color": "#002171"
+    },
+    {
+      "value": -2000.0,
+      "color": "#000828"
+    }
+  ]
+}

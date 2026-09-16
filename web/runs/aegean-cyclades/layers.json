@@ -1,0 +1,40 @@
+{
+  "layers": [
+    {
+      "id": "aegean-bathymetry",
+      "label": "Aegean bathymetry",
+      "type": "raster",
+      "tiles": "bathy_tiles/{z}/{x}/{y}.png",
+      "tileSize": 256,
+      "opacity": 0.8,
+      "visible": true,
+      "colorbar": true
+    },
+    {
+      "id": "extent-delos",
+      "label": "Delos extent",
+      "type": "line",
+      "file": "delos_extent.geojson",
+      "color": "#ffab00",
+      "width": 1.5,
+      "dash": [
+        2,
+        2
+      ],
+      "visible": true
+    },
+    {
+      "id": "extent-santorini-akrotiri",
+      "label": "Santorini Akrotiri extent",
+      "type": "line",
+      "file": "santorini-akrotiri_extent.geojson",
+      "color": "#ffab00",
+      "width": 1.5,
+      "dash": [
+        2,
+        2
+      ],
+      "visible": true
+    }
+  ]
+}

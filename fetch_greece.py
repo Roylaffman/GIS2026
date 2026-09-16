@@ -102,7 +102,15 @@ def main(only: str | None) -> None:
         run_site(name)
 
     log("\n== Aegean bathymetry (EMODnet) ==")
-    fetch_bathymetry(BATHY_BBOX, BATHY_OUT)
+    bathy = fetch_bathymetry(BATHY_BBOX, BATHY_OUT)
+
+    # colorized tiles + a dedicated Cyclades run (bathymetry + island extents)
+    log("\n== Aegean colorized bathymetry run ==")
+    try:
+        from make_bathymetry import make_bathymetry
+        make_bathymetry(bathy, WEB_DIR / "runs" / "aegean-cyclades")
+    except Exception as e:
+        log(f"  (bathymetry tiles skipped: {e})")
 
     update_manifest()
     log("\nDONE. Runs registered in web/runs/index.json; hub: /runs.html")

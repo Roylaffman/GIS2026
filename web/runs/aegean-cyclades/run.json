@@ -1,0 +1,11 @@
+{
+  "title": "Aegean Cyclades",
+  "center": [
+    25.5,
+    37.0
+  ],
+  "zoom": 8,
+  "query": null,
+  "created": "2026-09-09T00:00+00:00",
+  "display_name": "Aegean Sea bathymetry (EMODnet) with Cyclades islands"
+}

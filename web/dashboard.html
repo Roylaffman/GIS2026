@@ -72,8 +72,9 @@
     fetch(dataRoot + 'run.json').then(r => r.ok ? r.json() : null).catch(() => null),
     fetch(dataRoot + 'terrain.json').then(r => r.ok ? r.json() : null).catch(() => null),
     fetch(dataRoot + 'layers.json').then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch(dataRoot + 'profile.json').then(r => r.ok ? r.json() : null).catch(() => null)
-  ]).then(([runMeta, terrain, manifest, profile]) => {
+    fetch(dataRoot + 'profile.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(dataRoot + 'bathymetry.json').then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([runMeta, terrain, manifest, profile, bathy]) => {
     const title = (runMeta && runMeta.title) || 'Mount Mitchell';
     const center = (runMeta && runMeta.center) || [-82.2651, 35.7649];
     const zoom = (runMeta && runMeta.zoom) || 12;
@@ -118,22 +119,36 @@
         const srcId = 'src-' + l.id;
         sources[l.id] = srcId;
         layersState[l.id] = l.visible !== false;
-        map.addSource(srcId, { type: 'geojson', data: dataRoot + l.file });
-        if (l.type === 'fill') {
-          map.addLayer({ id: l.id, type: 'fill', source: srcId,
-            paint: { 'fill-color': l.color || '#1565c0', 'fill-opacity': l.opacity || 0.5,
-                     'fill-outline-color': l.outline || l.color || '#000' },
+        if (l.type === 'raster') {
+          // colorized XYZ raster (e.g. bathymetry); tiles pre-colored server-side
+          map.addSource(srcId, {
+            type: 'raster',
+            tiles: [dataRoot + l.tiles],
+            tileSize: l.tileSize || 256,
+            minzoom: l.minzoom || 0,
+            maxzoom: l.maxzoom || 15
+          });
+          map.addLayer({ id: l.id, type: 'raster', source: srcId,
+            paint: { 'raster-opacity': l.opacity || 0.8 },
             layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
-        } else if (l.type === 'line') {
-          map.addLayer({ id: l.id, type: 'line', source: srcId,
-            paint: { 'line-color': l.color || '#b71c1c', 'line-width': l.width || 2,
-                     'line-dasharray': l.dash || [1] },
-            layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
-        } else if (l.type === 'circle') {
-          map.addLayer({ id: l.id, type: 'circle', source: srcId,
-            paint: { 'circle-color': l.color || '#ff8f00', 'circle-radius': l.radius || 5,
-                     'circle-stroke-color': l.stroke || '#fff', 'circle-stroke-width': l.strokeWidth || 1 },
-            layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+        } else {
+          map.addSource(srcId, { type: 'geojson', data: dataRoot + l.file });
+          if (l.type === 'fill') {
+            map.addLayer({ id: l.id, type: 'fill', source: srcId,
+              paint: { 'fill-color': l.color || '#1565c0', 'fill-opacity': l.opacity || 0.5,
+                       'fill-outline-color': l.outline || l.color || '#000' },
+              layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+          } else if (l.type === 'line') {
+            map.addLayer({ id: l.id, type: 'line', source: srcId,
+              paint: { 'line-color': l.color || '#b71c1c', 'line-width': l.width || 2,
+                       'line-dasharray': l.dash || [1] },
+              layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+          } else if (l.type === 'circle') {
+            map.addLayer({ id: l.id, type: 'circle', source: srcId,
+              paint: { 'circle-color': l.color || '#ff8f00', 'circle-radius': l.radius || 5,
+                       'circle-stroke-color': l.stroke || '#fff', 'circle-stroke-width': l.strokeWidth || 1 },
+              layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+          }
         }
         // legend row
         const row = document.createElement('label');
@@ -142,6 +157,7 @@
         swatch.className = 'swatch';
         swatch.style.background = l.color || '#888';
         if (l.type === 'circle') swatch.style.borderRadius = '50%';
+        if (l.type === 'raster') swatch.style.background = '#1565c0';
         const cb = document.createElement('input');
         cb.type = 'checkbox'; cb.checked = layersState[l.id];
         cb.onchange = () => { layersState[l.id] = cb.checked; toggleLayer(l.id); };
@@ -150,6 +166,24 @@
         row.appendChild(cb); row.appendChild(swatch); row.appendChild(label);
         list.appendChild(row);
       });
+
+      // depth colorbar (for bathymetry raster)
+      if (bathy && bathy.colormap && bathy.colormap.length) {
+        const stops = bathy.colormap.slice().sort((a, b) => a.value - b.value);
+        const grad = stops.map(s => s.color).join(', ');
+        const bar = document.createElement('div');
+        bar.style.cssText = 'height:12px;margin:8px 0 2px;border-radius:3px;' +
+          'background:linear-gradient(to right,' + grad + ');';
+        const ticks = document.createElement('div');
+        ticks.style.cssText = 'display:flex;justify-content:space-between;font-size:10.5px;color:#555;';
+        ticks.innerHTML = `<span>${bathy.depth_max} m</span><span>0 m</span>`;
+        const label = document.createElement('div');
+        label.className = 'lbl';
+        label.textContent = 'Depth (m)';
+        list.appendChild(label);
+        list.appendChild(bar);
+        list.appendChild(ticks);
+      }
     });
 
     function toggleLayer(layerId) {
@@ -163,6 +197,9 @@
     if (profile) {
       statsHtml.push(`<div class="stat">Elevation: <b>${profile.min}–${profile.max} m</b></div>`);
       statsHtml.push(`<div class="stat">Transect: <b>${profile.distances[profile.distances.length - 1]} km</b></div>`);
+    }
+    if (bathy && bathy.depth_min !== undefined) {
+      statsHtml.push(`<div class="stat">Depth: <b>${bathy.depth_min} to ${bathy.depth_max} m</b></div>`);
     }
     if (runMeta && runMeta.query) {
       statsHtml.push(`<div class="stat">Query: <i>${runMeta.query}</i></div>`);

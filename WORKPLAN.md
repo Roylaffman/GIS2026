@@ -134,6 +134,12 @@ These bit us and will bite again — **do not rediscover them**:
   (terrain + dashboard). Plus **Aegean bathymetry** from EMODnet WCS (no key,
   Cyclades 24.5–26.5°E × 36–38°N, 1600×1600, −1921..1025 m, 93% sea) — overlaps
   the island sites. All 10 runs live in the hub.
+- **BATHYMETRY RASTER OVERLAY + COLORBAR** — `make_bathymetry.py` colorizes a
+  depth raster into RGBA XYZ tiles (sea = blue ramp, land transparent) + a
+  `bathymetry.json` (depth range + colormap stops). `dashboard.html` now
+  supports `type: "raster"` layers and draws a depth colorbar. The dedicated
+  `aegean-cyclades` run shows the colorized Aegean bathymetry with Delos +
+  Santorini extent outlines (1001 tiles, z8–12). Wired into `fetch_greece.py`.
 - **Remote push** — pushed to `github.com/Roylaffman/GIS2026` (done by user, verified in sync)
 
 ---
