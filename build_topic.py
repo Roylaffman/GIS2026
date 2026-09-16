@@ -104,8 +104,12 @@ def build_topic(topic_path: Path) -> str:
         print(f"  terrain tiles -> {out / 'tiles'}")
 
     (out / "topic.json").write_text(json.dumps(topic, indent=2))
-    url = f"/topic.html?topic={slug}"
-    print(f"\nDONE -> {out}")
+
+    # renderer: Mapbox GL JS is the primary engine; MapLibre is the tokenless fallback
+    engine = topic.get("engine", "mapbox")
+    page = "/topic-mapbox.html" if engine == "mapbox" else "/topic.html"
+    url = f"{page}?topic={slug}"
+    print(f"\nDONE -> {out}  [{engine}]")
     print(f"  view:  http://127.0.0.1:8090{url}")
     print(f"  embed: <iframe src=\"{url}\" width=\"100%\" height=\"620\" style=\"border:0\" loading=\"lazy\"></iframe>")
     return slug

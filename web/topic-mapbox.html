@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Topic map</title>
+<link rel="stylesheet" href="/lib/mapbox-gl.css"/>
+<style>
+  html,body,#map{height:100%;margin:0}
+  body{font:13px/1.5 'Segoe UI',sans-serif}
+  #panel{position:absolute;z-index:1000;top:10px;left:10px;width:310px;background:rgba(255,255,255,.96);
+         border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.28);overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
+  #panel header{background:#1a2a3a;color:#fff;padding:10px 14px}
+  #panel header h1{margin:0;font-size:15px}
+  #panel header p{margin:2px 0 0;font-size:11.5px;opacity:.85}
+  #panel .tabs{display:flex;background:#eee;font-size:12px}
+  #panel .tabs div{flex:1;text-align:center;padding:6px;cursor:pointer;font-weight:600;color:#555;border-bottom:2px solid transparent}
+  #panel .tabs div.on{color:#1565c0;border-bottom:2px solid #1565c0;background:#fff}
+  #panel .body{padding:10px 14px;overflow-y:auto}
+  .lbl{font-weight:600;margin:10px 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#555}
+  .layer-row{display:flex;align-items:center;gap:7px;margin:3px 0;cursor:pointer}
+  .layer-row input{accent-color:#1565c0}
+  .swatch{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.2);flex:0 0 auto}
+  .layer-row span{flex:1}
+  .qtag{display:inline-block;font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:8px;color:#fff;margin-left:4px;vertical-align:middle}
+  table.q{border-collapse:collapse;width:100%;font-size:11.5px;margin-top:6px}
+  table.q th,table.q td{border:1px solid #e0e0e0;padding:4px 6px;text-align:left;vertical-align:top}
+  table.q th{background:#f5f6f8}
+  ol.refs{margin:6px 0 0;padding-left:18px;font-size:11.5px}
+  ol.refs li{margin:3px 0}
+  #foot{position:absolute;z-index:1000;bottom:0;right:0;left:0;background:rgba(255,255,255,.92);
+        font-size:10.5px;color:#666;padding:4px 8px;text-align:center;border-top:1px solid #eee}
+  #err{position:absolute;z-index:2000;bottom:26px;right:10px;background:#b71c1c;color:#fff;
+       padding:8px 12px;border-radius:6px;font-size:12px;display:none;max-width:60%}
+  #chartbox{position:absolute;z-index:1000;bottom:24px;left:10px;width:340px;background:rgba(255,255,255,.95);
+            border-radius:10px;box-shadow:0 1px 8px rgba(0,0,0,.25);padding:10px;display:none}
+  #chartbox canvas{max-height:130px}
+</style>
+</head>
+<body>
+<div id="panel">
+  <header><h1 id="title">Topic</h1><p id="subtitle"></p></header>
+  <div class="tabs">
+    <div class="on" data-tab="layers">Layers</div>
+    <div data-tab="quality">Quality</div>
+    <div data-tab="refs">Refs</div>
+  </div>
+  <div class="body">
+    <div id="tab-layers">
+      <div class="lbl">Layers</div>
+      <div id="layerlist"></div>
+      <div id="colorbar" style="display:none"></div>
+    </div>
+    <div id="tab-quality" style="display:none"></div>
+    <div id="tab-refs" style="display:none"></div>
+  </div>
+</div>
+<div id="foot"></div>
+<div id="err"></div>
+<div id="map"></div>
+
+<script src="/config.js"></script>
+<script src="/lib/mapbox-gl.js"></script>
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('topic') || 'demo';
+  const dataRoot = '/topics/' + slug + '/';
+
+  function err(m) { const e = document.getElementById('err'); e.textContent = m; e.style.display = 'block'; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  const token = (window.DSH_CONFIG && window.DSH_CONFIG.mapboxToken) || '';
+  if (!token) { err('No MAPBOX_TOKEN found (check .env / /config.js)'); return; }
+  mapboxgl.accessToken = token;
+
+  fetch(dataRoot + 'topic.json').then(r => { if (!r.ok) throw new Error('topic.json ' + r.status); return r.json(); })
+  .then(topic => {
+    document.title = topic.title + ' — map';
+    document.getElementById('title').textContent = topic.title;
+    document.getElementById('subtitle').textContent = (topic.subtitle || '') +
+      (topic.engine ? '  ·  Mapbox GL' : '');
+
+    // ---- basemap: Mapbox styles (default) or plain raster fallback ----
+    const mbStyles = {
+      dark:      'mapbox://styles/mapbox/dark-v11',
+      light:     'mapbox://styles/mapbox/light-v11',
+      satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+      outdoors:  'mapbox://styles/mapbox/outdoors-v12',
+      streets:   'mapbox://styles/mapbox/streets-v12',
+    };
+    const styleUrl = mbStyles[topic.basemap] || mbStyles.dark;
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: styleUrl,
+      center: topic.center,
+      zoom: topic.zoom || 12,
+      pitch: topic.pitch != null ? topic.pitch : 0,
+      bearing: topic.bearing || 0,
+      maxPitch: 85,
+      antialias: true
+    });
+    map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
+    map.addControl(new mapboxgl.ScaleControl({ maxWidth: 120 }), 'bottom-left');
+    map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+    window._map = map;
+
+    const layersState = {};
+
+    map.on('load', () => {
+      // ---- 3D terrain + hillshade -------------------------------------
+      // prefer our own terrain-RGB tiles (works with any token/plan),
+      // else fall back to Mapbox's hosted terrain-dem.
+      const t = topic.terrain;
+      if (t) {
+        if (t.tiles) {
+          map.addSource('terrain-dem', {
+            type: 'raster-dem', tiles: [dataRoot + t.tiles], tileSize: 256,
+            encoding: 'mapbox', minzoom: 0, maxzoom: t.maxzoom || 15
+          });
+        } else if (t.use_mapbox !== false) {
+          map.addSource('terrain-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
+        }
+        if (map.getSource('terrain-dem')) {
+          if (t.hillshade !== false) {
+            map.addLayer({
+              id: 'hillshade', type: 'hillshade', source: 'terrain-dem',
+              paint: { 'hillshade-exaggeration': t.hillshade_exaggeration || 0.35,
+                       'hillshade-shadow-color': '#2b2b2b' }
+            });
+          }
+          map.setTerrain({ source: 'terrain-dem', exaggeration: t.exaggeration || 1.5 });
+        }
+      }
+
+      // ---- data layers -------------------------------------------------
+      let colorbarDrawn = false;
+      (topic.layers || []).forEach(l => {
+        const srcId = 'src-' + l.id;
+        layersState[l.id] = l.visible !== false;
+        if (l.type === 'raster') {
+          map.addSource(srcId, { type: 'raster', tiles: [dataRoot + l.tiles],
+            tileSize: l.tileSize || 256, minzoom: 0, maxzoom: l.maxzoom || 16 });
+          map.addLayer({ id: l.id, type: 'raster', source: srcId,
+            paint: { 'raster-opacity': l.opacity != null ? l.opacity : 0.8 },
+            layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+        } else {
+          map.addSource(srcId, { type: 'geojson', data: dataRoot + l.file });
+          if (l.type === 'fill') {
+            map.addLayer({ id: l.id, type: 'fill', source: srcId,
+              paint: { 'fill-color': l.color || '#888', 'fill-opacity': l.opacity != null ? l.opacity : 0.5,
+                       'fill-outline-color': l.outline || l.color || '#000' },
+              layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+          } else if (l.type === 'line') {
+            map.addLayer({ id: l.id, type: 'line', source: srcId,
+              paint: { 'line-color': l.color || '#888', 'line-width': l.width || 1.6,
+                       'line-dasharray': l.dash || [1] },
+              layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+          } else if (l.type === 'circle') {
+            map.addLayer({ id: l.id, type: 'circle', source: srcId,
+              paint: { 'circle-color': l.color || '#ff8f00', 'circle-radius': l.radius || 5,
+                       'circle-stroke-color': l.stroke || '#fff', 'circle-stroke-width': l.strokeWidth || 1 },
+              layout: { visibility: l.visible !== false ? 'visible' : 'none' } });
+          } else if (l.type === 'symbol') {
+            map.addLayer({ id: l.id, type: 'symbol', source: srcId,
+              layout: {
+                'text-field': ['get', l.label_field || 'name'],
+                'text-size': l.text_size || 11,
+                'text-offset': [0, 0.8], 'text-anchor': 'top',
+                'visibility': l.visible !== false ? 'visible' : 'none'
+              },
+              paint: { 'text-color': l.color || '#fff', 'text-halo-color': l.halo || '#000', 'text-halo-width': 1.2 } });
+          }
+          map.on('click', l.id, (e) => {
+            const f = e.features && e.features[0];
+            if (!f) return;
+            const p = f.properties || {};
+            const html = (l.popup && l.popup(p, esc)) || defaultPopup(p);
+            new mapboxgl.Popup({ offset: 12, maxWidth: '300px' }).setLngLat(e.lngLat).setHTML(html).addTo(map);
+          });
+          map.on('mouseenter', l.id, () => { map.getCanvas().style.cursor = 'pointer'; });
+          map.on('mouseleave', l.id, () => { map.getCanvas().style.cursor = ''; });
+        }
+        // legend row with quality tag
+        const q = (topic.quality_legend || []).find(x => x.tag === l.quality);
+        const row = document.createElement('label');
+        row.className = 'layer-row';
+        const sw = document.createElement('span'); sw.className = 'swatch';
+        sw.style.background = l.color || (l.type === 'raster' ? '#1565c0' : '#888');
+        if (l.type === 'circle') sw.style.borderRadius = '50%';
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = layersState[l.id];
+        cb.onchange = () => { layersState[l.id] = cb.checked; toggle(l.id); };
+        const lab = document.createElement('span'); lab.textContent = l.label || l.id;
+        const tag = document.createElement('span'); tag.className = 'qtag';
+        tag.textContent = l.quality || ''; tag.style.background = q ? q.color : '#999';
+        row.appendChild(cb); row.appendChild(sw); row.appendChild(lab); row.appendChild(tag);
+        document.getElementById('layerlist').appendChild(row);
+
+        // depth/value colorbar for the first colorized raster that has a colormap
+        if (!colorbarDrawn && l.type === 'raster' && l.colormap && l.colormap.length) {
+          colorbarDrawn = true;
+          const box = document.getElementById('colorbar');
+          const stops = l.colormap.slice().sort((a, b) => a.value - b.value);
+          const grad = stops.map(s => s.color).join(', ');
+          box.innerHTML = '<div class="lbl">' + esc(l.legend_label || 'Value') + '</div>' +
+            '<div style="height:12px;border-radius:3px;background:linear-gradient(to right,' + grad + ')"></div>' +
+            '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:#555">' +
+            '<span>' + esc(l.depth_min != null ? l.depth_min : (stops[0].value)) + '</span>' +
+            '<span>' + esc(l.depth_max != null ? l.depth_max : (stops[stops.length - 1].value)) + '</span></div>';
+          box.style.display = 'block';
+        }
+      });
+    });
+
+    function defaultPopup(p) {
+      const name = p.name || p.title || p.label || '';
+      const desc = p.description || p.desc || p.note || '';
+      return `<b>${esc(name)}</b>` + (desc ? `<br/>${esc(desc)}` : '');
+    }
+    function toggle(id) {
+      const vis = layersState[id] ? 'visible' : 'none';
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', vis);
+    }
+
+    // ---- Source Quality Legend ----
+    const qdiv = document.getElementById('tab-quality');
+    if (topic.quality_legend && topic.quality_legend.length) {
+      const rows = topic.quality_legend.map(q =>
+        `<tr><td><span class="qtag" style="background:${q.color}">${esc(q.tag)}</span></td>` +
+        `<td>${esc(q.meaning)}</td><td>${esc(q.examples || '')}</td></tr>`).join('');
+      qdiv.innerHTML = `<div class="lbl">Source Quality Legend</div>` +
+        `<table class="q"><thead><tr><th>Tag</th><th>Meaning</th><th>Examples</th></tr></thead><tbody>${rows}</tbody></table>`;
+    } else {
+      qdiv.innerHTML = '<div class="lbl">Source Quality</div><p style="color:#888">No quality tags defined.</p>';
+    }
+
+    // ---- References ----
+    const rdiv = document.getElementById('tab-refs');
+    if (topic.references && topic.references.length) {
+      const items = topic.references.map(r =>
+        `<li>${esc(r.text)}${r.url ? ' <a href="' + esc(r.url) + '" target="_blank">&#8599;</a>' : ''}</li>`).join('');
+      rdiv.innerHTML = `<div class="lbl">References</div><ol class="refs">${items}</ol>`;
+    } else {
+      rdiv.innerHTML = '<div class="lbl">References</div><p style="color:#888">None.</p>';
+    }
+
+    // ---- footer ----
+    const credits = ['Mapbox GL JS'];
+    (topic.layers || []).forEach(l => { if (l.source_name) credits.push(l.source_name); });
+    document.getElementById('foot').textContent =
+      (topic.attribution || 'Data sources as credited.') + ' · ' + credits.join(' · ');
+
+    // ---- tabs ----
+    document.querySelectorAll('.tabs div').forEach(t => {
+      t.onclick = () => {
+        document.querySelectorAll('.tabs div').forEach(x => x.classList.remove('on'));
+        t.classList.add('on');
+        ['layers','quality','refs'].forEach(k => {
+          document.getElementById('tab-' + k).style.display = (k === t.dataset.tab) ? '' : 'none';
+        });
+      };
+    });
+  }).catch(e => err(e.message));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+{
+  "title": "Mount Mitchell — 3D Terrain & Trails",
+  "subtitle": "SRTM 30 m DEM with POI density and points of interest",
+  "engine": "mapbox",
+  "center": [-82.2651, 35.7649],
+  "zoom": 12.4,
+  "pitch": 62,
+  "bearing": -18,
+  "basemap": "satellite",
+  "attribution": "DEM © SRTM/OpenTopography; points © Google Maps via SerpAPI; basemap © Mapbox.",
+  "quality_legend": [
+    { "tag": "Gov.", "color": "#377eb8", "meaning": "Government / public-agency data, publicly audited", "examples": "USGS, NASA SRTM, EMODnet" },
+    { "tag": "Computed", "color": "#7570b3", "meaning": "Derived in this project (tiling, aggregation, extents)", "examples": "terrain-RGB tiles, H3 hexbins, DEM extent" },
+    { "tag": "Gray lit.", "color": "#e6ab02", "meaning": "Commercial/aggregated listings — not authoritative", "examples": "Google Maps places via SerpAPI" }
+  ],
+  "terrain": {
+    "dem": "data/dem_mount_mitchell.tif",
+    "exaggeration": 1.6,
+    "hillshade": true,
+    "hillshade_exaggeration": 0.4
+  },
+  "layers": [
+    {
+      "id": "h3-density",
+      "label": "POI density (H3)",
+      "type": "fill",
+      "file": "web/h3_hexagons.geojson",
+      "color": "#1565c0",
+      "opacity": 0.35,
+      "outline": "#0d47a1",
+      "quality": "Computed",
+      "source_name": "H3 aggregation (this project)",
+      "visible": true
+    },
+    {
+      "id": "pois",
+      "label": "Points of interest",
+      "type": "circle",
+      "file": "web/pois.geojson",
+      "color": "#ff8f00",
+      "radius": 5,
+      "stroke": "#ffffff",
+      "strokeWidth": 1.2,
+      "quality": "Gray lit.",
+      "source_name": "Google Maps via SerpAPI",
+      "source_url": "https://serpapi.com",
+      "popup_source": true,
+      "visible": true
+    },
+    {
+      "id": "dem-extent",
+      "label": "DEM tile extent",
+      "type": "line",
+      "file": "web/dem_bounds.geojson",
+      "color": "#b71c1c",
+      "width": 1.4,
+      "dash": [2, 2],
+      "quality": "Computed",
+      "source_name": "SRTM / OpenTopography",
+      "source_url": "https://opentopography.org",
+      "visible": false
+    }
+  ],
+  "references": [
+    { "text": "NASA JPL. 2013. NASA Shuttle Radar Topography Mission Global 1 arc second (SRTMGL1). Distributed by OpenTopography.", "url": "https://opentopography.org" },
+    { "text": "Uber. 2018. H3: A Hexagonal Hierarchical Spatial Index.", "url": "https://h3geo.org" },
+    { "text": "Google Maps Platform place data, retrieved via SerpAPI (commercial aggregation).", "url": "https://serpapi.com" }
+  ]
+}

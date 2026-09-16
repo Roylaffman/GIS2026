@@ -123,20 +123,22 @@ A topic is one JSON file that describes every layer + its provenance:
 ## 5. Implementation phases
 
 ### Phase A — Topic schema + generic topic builder (this is the core)
-- [x] `topics/` dir + example topic JSON (`aegean-coast` — bathymetry + island extents)
+- [x] `topics/` dir + example topic JSONs (`aegean-coast`, `mount-mitchell`)
 - [x] `build_topic.py`: validate schema, copy layer files, colorize rasters into
-      tiles, emit topic + `<iframe>` snippet
-- [x] `web/topic.html` template — currently **MapLibre**; **next: port to
-      Mapbox GL JS as the primary renderer** (3D terrain + coded GeoJSON),
-      keeping the MapLibre template as the tokenless fallback:
-  - basemap switch
-  - 3D terrain + raster + vector layers + toggles
-  - popups (properties-driven)
-  - **Source Quality Legend** table (auto from `quality_legend` + per-layer tags)
-  - **References** list
-  - attribution control + footer
-- [ ] Port `web/topic.html` → Mapbox GL JS (primary), then also emit a
-      `mapbox.html`-style self-contained topic page
+      tiles, generate terrain tiles, emit topic + `<iframe>` snippet;
+      routes by `"engine"` (default `mapbox`)
+- [x] **`web/topic-mapbox.html` — Mapbox GL JS renderer (PRIMARY)**
+  - token from `/config.js`; vendored `mapbox-gl.js`/`.css` v3.4.0 in `web/lib/`
+  - Mapbox basemap styles (dark / light / satellite / outdoors / streets)
+  - **3D terrain** (`raster-dem` + `setTerrain`, exaggeration) + hillshade —
+    uses our own terrain-RGB tiles, or Mapbox-hosted terrain-dem
+  - raster / fill / line / circle / **symbol (labels)** layers + toggles
+  - popups (properties-driven), pitch/bearing, fullscreen, scale
+  - **Source Quality Legend** table + **References** list + attribution footer
+- [x] `web/topic.html` — MapLibre renderer kept as the **tokenless fallback**
+- [x] Verified: mount-mitchell (terrain + 3 GeoJSON layers) and aegean-coast
+      (bathymetry raster + extents) build and serve; terrain tiles decode
+      0–2028 m.
 
 ### Phase B — Raster generalization (reuse what we built)
 - [ ] Split `make_bathymetry.py` into a generic `make_colormap_tiles.py`
@@ -163,19 +165,26 @@ A topic is one JSON file that describes every layer + its provenance:
 
 A working demo where one command:
 ```
-.venv\Scripts\python.exe build_topic.py topics/greece-coast.json
+.venv\Scripts\python.exe build_topic.py topics/mount-mitchell.json
 ```
-…produces `web/topics/greece-coast/index.html` showing the Aegean bathymetry +
-island DEMs as toggleable layers with a **Source Quality Legend** and
-**References**, viewable at `/topics/greece-coast/`, embeddable in Quarto via
-an `<iframe>`, all open-source (MapLibre, no Mapbox token, no CDN).
+…produces `web/topics/mount-mitchell/` with 3D terrain + coded GeoJSON layers,
+a **Source Quality Legend** and **References**, viewable at
+`/topic-mapbox.html?topic=mount-mitchell`, embeddable in Quarto via `<iframe>`.
+
+**Status: met** (Mapbox GL JS primary; MapLibre fallback retained).
 
 ## 7. Risks / notes
 
-- **MapLibre version skew** — reference pages use 4.7.1 via unpkg; we vendor
-  (5.24). Styles differ slightly; verify layer rendering manually (sandbox
-  can't screenshot).
-- **Symbol layers** (text labels) need a glyphs URL. For offline/self-contained
-  we avoid `symbol` initially (use `circle` + `line` + `fill` + `raster`).
+- **Mapbox GL JS needs the token** — served at runtime via `/config.js` from
+  `.env` (never baked into the HTML). If the token is missing/unset the page
+  shows a clear error banner. MapLibre page remains the tokenless fallback.
+- **Terrain source** — we prefer our own terrain-RGB tiles (works regardless of
+  Mapbox plan/terrain entitlements); `use_mapbox: true` switches to
+  `mapbox://mapbox.mapbox-terrain-dem-v1`.
+- **Symbol layers** — Mapbox GL has hosted glyphs, so `symbol` (text labels)
+  is supported here (it was avoided in the offline MapLibre page).
 - **Quarto embedding** — iframes work but can't share state; that's fine for
   attribution-style maps. A future option is injecting the map's JS directly.
+- **Manual verification needed** — the sandbox can't run a browser/WebGL, so
+  map *rendering* must be eyeballed by the user; we verify data, tiles, JSON,
+  and JS syntax programmatically.

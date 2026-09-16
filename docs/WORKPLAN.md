@@ -175,6 +175,11 @@ These bit us and will bite again — **do not rediscover them**:
 - [x] **inspect_data.py** — vector data QA (fields/CRS/bounds/nulls/duplicates)
 - [x] **analyze_dem.py** — DEM + bathymetry analysis (stats, hypsometry, volume,
       slope/aspect/hillshade, profile)
+- [x] **Topic → webmap system** — `build_topic.py` + topic schema; two example
+      topics (`mount-mitchell`, `aegean-coast`)
+- [x] **Mapbox GL JS primary renderer** — `web/topic-mapbox.html` (3D terrain +
+      coded GeoJSON + Source Quality Legend + References + iframe embed);
+      `web/topic.html` (MapLibre) retained as tokenless fallback
 - [x] Pushed to GitHub (user pushed; verified `origin/main` in sync)
 
 ---
@@ -186,7 +191,12 @@ These bit us and will bite again — **do not rediscover them**:
 - [ ] **GCS upload** — push DEM/GeoJSON/COG to `gs://www.geoglypha1.org`
 
 **Next build steps (unblocked)**
-- [ ] **Arbitrary raster overlays** in dashboard/deck (flood extents, SST, etc. as colorized GeoTIFF + legend/colorbar) — next step toward the flood/`climate` dashboards
+- [ ] **Phase B** — generalize `make_bathymetry.py` → `make_colormap_tiles.py`
+      (any value raster + colormap), so topics can colorize SST/flood/etc.
+- [ ] **Phase C** — layer *fetchers* in build_topic: a topic can say
+      `"source": "emodnet" | "opentopo" | "serpapi"` and the builder downloads it
+- [ ] **Phase D** — Quarto `.qmd` integration proof (embed topic map + legend + refs)
+- [ ] **Phase E** — topic gallery hub (`web/topics.html`) + popup templates
 - [ ] **CesiumJS globe** (per run; Apache-2.0; self-host terrain to stay tokenless)
 - [ ] **PMTiles / vector tiles** for POIs (tippecanoe) once data grows
 - [ ] **GeoParquet** export so DuckDB + GeoPandas share one format
@@ -238,7 +248,8 @@ DSHtest/
 │   ├── deck.html             # parameterized Deck.gl (?run=<slug>)
 │   ├── kepler.html           # parameterized Kepler.gl (?run=<slug>)
 │   ├── dashboard.html        # parameterized dashboard (terrain+layers+profile)
-│   ├── topic.html            # parameterized topic map (?topic=<slug>)
+│   ├── topic.html            # parameterized topic map (?topic=<slug>) - MapLibre fallback
+│   ├── topic-mapbox.html     # parameterized topic map (?topic=<slug>) - Mapbox GL PRIMARY
 │   ├── runs.html             # hub listing all quick-map runs
 │   ├── runs/                 # one folder per quick map + index.json
 │   │   ├── index.json
