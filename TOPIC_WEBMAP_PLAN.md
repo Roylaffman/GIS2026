@@ -1,8 +1,25 @@
 # Topic → Webmap System (Quarto-embeddable) — Plan
 
 > Generalize DSHtest from "fetch DEMs + POIs for a place" into **"pick a topic,
-> assemble layers, emit an embeddable MapLibre webmap with a Source Quality
+> assemble layers, emit an embeddable Mapbox GL webmap with a Source Quality
 > Legend + references, ready for a Quarto document."**
+
+## 0. Renderer decision (primary)
+
+- **Primary map engine: Mapbox GL JS** — chosen because it renders **3D terrain**
+  natively (`raster-dem` + `setTerrain`) and ingests **GeoJSON** that can be
+  coded inline (addSource/addLayer) with full style control. Needs the
+  `MAPBOX_TOKEN` (already in `.env`, served via `/config.js`).
+- **MapLibre GL, Deck.gl, Kepler.gl, Leaflet, Cesium** remain in the toolkit and
+  are used *when the task calls for them*:
+  - MapLibre GL — tokenless fallback / where Mapbox terms don't apply
+  - Deck.gl — big-data overlays (hexagons, scatter, trips) on top of a basemap
+  - Kepler.gl — quick drag-drop data exploration
+  - Leaflet — lightweight static/vector maps
+  - Cesium — full globe / time-dynamic scenes
+- The topic schema stays **engine-agnostic** (layers + style + quality), but the
+  emitted `index.html` targets **Mapbox GL JS** first, with a MapLibre template
+  kept as a drop-in alternative.
 
 ## 1. What we learned from the reference pages
 
@@ -82,14 +99,15 @@ A topic is one JSON file that describes every layer + its provenance:
    - DEM → `make_terrain.py` (terrain-RGB tiles) if `terrain`
    - value raster → `make_bathymetry.py`-style **colorized tiles + colormap**
      (already built for bathymetry; generalize to any value ramp)
-3. **Emit `index.html`** — a **self-contained MapLibre page** (vendored libs
-   already in `web/lib/`), reading the topic JSON and rendering:
+3. **Emit `index.html`** — a **self-contained Mapbox GL JS page** (vendored or
+   CDN; token via `/config.js`), reading the topic JSON and rendering:
    - basemap (dark/light/OSM/satellite via raster source)
-   - 3D terrain + hillshade (optional)
-   - every layer as fill/line/circle/raster with popups + toggles
+   - **3D terrain + hillshade** (`raster-dem` + `setTerrain`, exaggeration)
+   - every layer as fill/line/circle/raster/symbol, with **GeoJSON coded in**
+     (addSource/addLayer) and popups + toggles
    - **Source Quality Legend** (from `quality_legend`, each layer tagged)
    - **References** section
-   - **attribution control** (MapLibre built-in) + a footer credit list
+   - **attribution control** + a footer credit list
 4. **Emit an embed snippet** — a `<iframe src="topics/foo/index.html">` block
    + a `<script>`-less fallback, so it drops straight into Quarto.
 
@@ -99,25 +117,26 @@ A topic is one JSON file that describes every layer + its provenance:
   - `{{< embed ... >}}` shortcode, or
   - a raw HTML block with `<iframe src="/topics/foo/index.html" width="100%" height="600" frameborder="0">`.
 - Serve `web/topics/` from `serve_map.py` (already serves `web/`).
-- No token, no CDN dependency (vendored MapLibre/Chart already local).
+- Mapbox GL JS needs the token (served via `/config.js` from `.env`); MapLibre
+  fallback template stays tokenless if ever needed.
 
 ## 5. Implementation phases
 
 ### Phase A — Topic schema + generic topic builder (this is the core)
-- [ ] `topics/` dir + one example topic JSON (`chimney-rock`-style, but using
-      data we can actually fetch — e.g. the Mount Mitchell / Greek runs as a first topic)
-- [ ] `build_topic.py`:
-  - validate schema (required fields, layer types, quality tags)
-  - copy layer files, run terrain/colorize when needed
-  - render `index.html` from a template
-- [ ] `web/topic.html` template (MapLibre) with:
+- [x] `topics/` dir + example topic JSON (`aegean-coast` — bathymetry + island extents)
+- [x] `build_topic.py`: validate schema, copy layer files, colorize rasters into
+      tiles, emit topic + `<iframe>` snippet
+- [x] `web/topic.html` template — currently **MapLibre**; **next: port to
+      Mapbox GL JS as the primary renderer** (3D terrain + coded GeoJSON),
+      keeping the MapLibre template as the tokenless fallback:
   - basemap switch
-  - terrain + raster + vector layers + toggles
+  - 3D terrain + raster + vector layers + toggles
   - popups (properties-driven)
   - **Source Quality Legend** table (auto from `quality_legend` + per-layer tags)
   - **References** list
   - attribution control + footer
-- [ ] `make_topic.py` (or fold into build_topic) → produce `<iframe>` snippet
+- [ ] Port `web/topic.html` → Mapbox GL JS (primary), then also emit a
+      `mapbox.html`-style self-contained topic page
 
 ### Phase B — Raster generalization (reuse what we built)
 - [ ] Split `make_bathymetry.py` into a generic `make_colormap_tiles.py`

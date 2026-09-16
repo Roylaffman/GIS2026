@@ -82,6 +82,15 @@ These bit us and will bite again — **do not rediscover them**:
 | 13 | `PROJ_LIB` env points at PostGIS old proj.db | `CRSError: proj_create_from_database ... LAYOUT.VERSION.MINOR` | Set `PROJ_LIB` to `.venv\Lib\site-packages\rasterio\proj_data` before rasterio warp/COG |
 | 14 | PNG tile writes warn "NotGeoreferenced" | noisy but harmless | filter the warning; XYZ naming carries georef |
 
+## Renderer decision (recorded)
+
+- **Primary map engine for topic/main maps: Mapbox GL JS** — native 3D terrain
+  (`raster-dem` + `setTerrain`) and coded-in GeoJSON (`addSource`/`addLayer`).
+  Uses `MAPBOX_TOKEN` (in `.env`, served via `/config.js`).
+- **MapLibre GL / Deck.gl / Kepler.gl / Leaflet / Cesium** are used when the task
+  calls for them (tokenless fallback, big-data overlays, quick exploration,
+  static maps, globe). See `TOPIC_WEBMAP_PLAN.md` §0 for the full table.
+
 ---
 
 ## 3. What works today ✅
