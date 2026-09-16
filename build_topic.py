@@ -76,6 +76,16 @@ def build_topic(topic_path: Path) -> str:
     out.mkdir(parents=True, exist_ok=True)
     topic_dir = topic_path.parent
 
+    # POIs across the whole topic area (grid of SerpAPI queries + H3)
+    pois_spec = topic.get("pois")
+    if pois_spec:
+        from fetch_grid_pois import fetch_grid_pois
+        grid = pois_spec.get("grid") or (topic.get("terrain") or {}).get("grid") or {"n": 4, "cell": 0.08}
+        fetch_grid_pois(topic["center"][1], topic["center"][0],
+                        grid.get("n", 4), grid.get("cell", 0.08),
+                        pois_spec.get("query", "points of interest"),
+                        out, pois_spec.get("step", 1), pois_spec.get("zoom", 13))
+
     for l in topic["layers"]:
         if l["type"] == "raster" and l.get("dem"):
             dem = resolve_path(l["dem"], topic_dir)
@@ -87,6 +97,11 @@ def build_topic(topic_path: Path) -> str:
             l["depth_max"] = meta["depth_max"]
             print(f"  colorized raster {l['id']}: {meta['depth_min']}..{meta['depth_max']} m, tiles={meta['tiles']}")
         elif l["type"] != "raster":
+            # if the file already lives in the output dir (e.g. written by a
+            # fetcher like fetch_grid_pois), use it as-is
+            if (out / l["file"]).exists():
+                print(f"  layer {l['id']}: {l['file']} (already in output)")
+                continue
             src = resolve_path(l["file"], topic_dir)
             # use layer id as the filename to avoid collisions (e.g. two extents)
             dst = out / (l["id"] + Path(src).suffix)

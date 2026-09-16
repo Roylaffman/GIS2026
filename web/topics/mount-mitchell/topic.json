@@ -43,12 +43,21 @@
     "hillshade_exaggeration": 0.4,
     "tiles": "tiles/{z}/{x}/{y}.png"
   },
+  "pois": {
+    "query": "hiking trails waterfalls overlooks state park",
+    "grid": {
+      "n": 4,
+      "cell": 0.08
+    },
+    "step": 1,
+    "zoom": 13
+  },
   "layers": [
     {
       "id": "h3-density",
       "label": "POI density (H3)",
       "type": "fill",
-      "file": "h3-density.geojson",
+      "file": "h3_grid.geojson",
       "color": "#1565c0",
       "opacity": 0.35,
       "outline": "#0d47a1",
@@ -60,7 +69,7 @@
       "id": "pois",
       "label": "Points of interest",
       "type": "circle",
-      "file": "pois.geojson",
+      "file": "pois_grid.geojson",
       "color": "#ff8f00",
       "radius": 5,
       "stroke": "#ffffff",

@@ -1,0 +1,581 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.344095,
+     35.7343498
+    ]
+   },
+   "properties": {
+    "name": "View Glassmine Falls Overlook",
+    "address": "Black Mountain, NC 28711",
+    "rating": 4.7,
+    "reviews": 318,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJe1fqYaADWogRiyRsiy_wTCk"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.22749069999999,
+     35.7501177
+    ]
+   },
+   "properties": {
+    "name": "Setrock Creek Falls",
+    "address": "Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 58,
+    "ptype": "Hiking area",
+    "place_id": "ChIJWX_pw7IAWogRjoicAuvwIxg"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.3736574,
+     35.7042523
+    ]
+   },
+   "properties": {
+    "name": "Craggy Dome Overlook",
+    "address": "3641 Blue Ridge Pkwy, Barnardsville, NC 28709",
+    "rating": 4.9,
+    "reviews": 113,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJqy4GkMQCWogROP_gwaCB7EU"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.23042099999999,
+     35.75063
+    ]
+   },
+   "properties": {
+    "name": "Setrock Falls",
+    "address": "Setrock Creek, Burnsville, NC 28714",
+    "rating": 4.5,
+    "reviews": 44,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJJTU_RbMAWogRNfNHlmAECfg"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2448579,
+     35.6044903
+    ]
+   },
+   "properties": {
+    "name": "Catawba Falls",
+    "address": "3074 Catawba River Rd, Old Fort, NC 28762",
+    "rating": 4.8,
+    "reviews": 2070,
+    "ptype": "Tourist attraction",
+    "place_id": "ChIJHV4XKzH-WYgRPuSmiIYEHbQ"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.33160629999999,
+     35.735332199999995
+    ]
+   },
+   "properties": {
+    "name": "Glassmine Falls",
+    "address": "Black Mountain, NC 28711",
+    "rating": 4.4,
+    "reviews": 24,
+    "ptype": "Observation deck",
+    "place_id": "ChIJx2-Bnb0DWogRWFThN4mKzY0"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.4916286,
+     35.616960299999995
+    ]
+   },
+   "properties": {
+    "name": "Haw Creek Valley Overlook",
+    "address": "3800 Blue Ridge Pkwy, Asheville, NC 28805",
+    "rating": 4.7,
+    "reviews": 695,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJYSb0CD70WYgRypZ5Upga6D4"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.29003089999999,
+     35.6431385
+    ]
+   },
+   "properties": {
+    "name": "Lookout Mountain Trailhead",
+    "address": "99999 Lookout Rd, Black Mountain, NC 28711",
+    "rating": 4.9,
+    "reviews": 147,
+    "ptype": "Hiking area",
+    "place_id": "ChIJ-SITj9D_WYgRkdKxDXvpD2o"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.49176709999999,
+     35.647987199999996
+    ]
+   },
+   "properties": {
+    "name": "Craven Gap Trail",
+    "address": "Asheville, NC 28805",
+    "rating": 4.6,
+    "reviews": 396,
+    "ptype": "Hiking area",
+    "place_id": "ChIJrWBKUM_1WYgRxX8lbPVuVUg"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.4562084,
+     35.6562943
+    ]
+   },
+   "properties": {
+    "name": "Bull Creek Valley Overlook",
+    "address": "Blue Ridge Pkwy, Asheville, NC 28805",
+    "rating": 4.7,
+    "reviews": 262,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJRc0j2Gr2WYgRLAZnEBNhD5g"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2226326,
+     35.717641
+    ]
+   },
+   "properties": {
+    "name": "Green Knob Overlook",
+    "address": "Blue Ridge Pkwy, Old Fort, NC 28762",
+    "rating": 4.8,
+    "reviews": 404,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJdejO14QAWogRaj02RuWm8lQ"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.219017,
+     35.7232093
+    ]
+   },
+   "properties": {
+    "name": "Mt. Mitchell Overlook",
+    "address": "Blue Ridge Pkwy, Old Fort, NC 28762",
+    "rating": 4.9,
+    "reviews": 148,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJv3wTI5wAWogRYFkU6pJuY7w"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2785842,
+     35.7171142
+    ]
+   },
+   "properties": {
+    "name": "Ridge Junction Overlook",
+    "address": "55230 Blue Ridge Pkwy, Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 158,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJP_OIogwBWogRaEqqQxYmtkY"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.4852413,
+     35.6529483
+    ]
+   },
+   "properties": {
+    "name": "Tanbark Ridge Overlook",
+    "address": "3767 Blue Ridge Pkwy, Asheville, NC 28804",
+    "rating": 4.8,
+    "reviews": 1004,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJ29ehWtv1WYgRDSHGkpuR5Vw"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.4422426,
+     35.6679233
+    ]
+   },
+   "properties": {
+    "name": "Lane Pinnacle Overlook",
+    "address": "Blue Ridge Pkwy, Asheville, NC 28805",
+    "rating": 4.8,
+    "reviews": 272,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJw2k-8S_2WYgRkQotqr3nqns"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.3641834,
+     35.711006399999995
+    ]
+   },
+   "properties": {
+    "name": "Graybeard Mountain View Overlook",
+    "address": "Blue Ridge Pkwy, Barnardsville, NC 28709",
+    "rating": 4.9,
+    "reviews": 48,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJXwdKr0YDWogRmEvYqdIS_po"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.1952975,
+     35.7684699
+    ]
+   },
+   "properties": {
+    "name": "Roaring Fork Falls Trailhead",
+    "address": "208 Busick Work Center Rd, Burnsville, NC 28714",
+    "rating": 4.8,
+    "reviews": 439,
+    "ptype": "Hiking area",
+    "place_id": "ChIJJzlf-uqpUIgRCXsBKATf3Qo"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.37437779999999,
+     35.7287178
+    ]
+   },
+   "properties": {
+    "name": "Douglas Falls Trailhead",
+    "address": "State Rd 2173, Barnardsville, NC 28709",
+    "rating": 4.8,
+    "reviews": 69,
+    "ptype": "Hiking area",
+    "place_id": "ChIJ8Yb5LzsDWogR8NopWxJb1-k"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.37427939999999,
+     35.7209479
+    ]
+   },
+   "properties": {
+    "name": "Douglas Falls",
+    "address": "Barnardsville, NC 28709",
+    "rating": 4.4,
+    "reviews": 69,
+    "ptype": "Tourist attraction",
+    "place_id": "ChIJJX0ctC8DWogRUzOme8VHuT4"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.05671439999999,
+     35.7745799
+    ]
+   },
+   "properties": {
+    "name": "Toms Creek Falls Trail",
+    "address": "1250 Huskins Branch Rd, Marion, NC 28752",
+    "rating": 4.9,
+    "reviews": 1024,
+    "ptype": "Hiking area",
+    "place_id": "ChIJrQ9GtDCuUIgRebJZk0U3Z1M"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.0342859,
+     35.8608568
+    ]
+   },
+   "properties": {
+    "name": "Table Rock Mountain Overlook",
+    "address": "Blue Ridge Pkwy, Spruce Pine, NC 28777",
+    "rating": 4.8,
+    "reviews": 160,
+    "ptype": "Scenic spot",
+    "place_id": "ChIJo5wpcdG6UIgR8PxMwc4Zk_A"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2309001,
+     35.6131586
+    ]
+   },
+   "properties": {
+    "name": "Catawba Falls Trailhead",
+    "address": "3074 Catawba River Rd, Old Fort, NC 28762",
+    "rating": 4.8,
+    "reviews": 707,
+    "ptype": "Hiking area",
+    "place_id": "ChIJyZ6ZLjH-WYgRvxtCmWGX5aY"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.24747049999999,
+     35.6019141
+    ]
+   },
+   "properties": {
+    "name": "Upper Catawba Falls",
+    "address": "Catawba River Rd, Old Fort, NC 28762, United States",
+    "rating": 4.8,
+    "reviews": 315,
+    "ptype": "National forest",
+    "place_id": "ChIJY6AhEEP-WYgRyBJU8pT6M3E"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2014255,
+     35.7268861
+    ]
+   },
+   "properties": {
+    "name": "Emma Falls",
+    "address": "PQGX+QC, Old Fort, NC 28762, United States",
+    "rating": 5,
+    "reviews": 1,
+    "ptype": "Hiking area",
+    "place_id": "ChIJxdgyJwCrUIgRBUha6NSmsgw"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2239034,
+     35.719834
+    ]
+   },
+   "properties": {
+    "name": "Green Knob Lookout Tower",
+    "address": "Milepost 350.4, Blue Ridge Pkwy, Old Fort, NC 28762, United States",
+    "rating": 4.5,
+    "reviews": 44,
+    "ptype": "Hiking area",
+    "place_id": "ChIJgVbP6ZoAWogRPKl_2u0D9gI"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.26336769999999,
+     35.772837599999995
+    ]
+   },
+   "properties": {
+    "name": "Mount Mitchell State Park",
+    "address": "2388 NC-128, Burnsville, NC 28714",
+    "rating": 4.9,
+    "reviews": 5446,
+    "ptype": "State park",
+    "place_id": "ChIJWXnXPt0GWogRk2rYG0MMDF0"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.1433417,
+     35.812353
+    ]
+   },
+   "properties": {
+    "name": "Crabtree Falls Trail",
+    "address": "39000 Blue Ridge Pkwy, Marion, NC 28752",
+    "rating": 4.8,
+    "reviews": 583,
+    "ptype": "Hiking area",
+    "place_id": "ChIJdRpYVbeoUIgRTvpSMxQw_eI"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.04865389999999,
+     35.6873577
+    ]
+   },
+   "properties": {
+    "name": "Fonta Flora State Trail",
+    "address": "Marion, NC 28752",
+    "rating": 4.9,
+    "reviews": 15,
+    "ptype": "Hiking area",
+    "place_id": "ChIJBdBy6-KtUIgRbu0mHusSjww"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.3542913,
+     35.7556703
+    ]
+   },
+   "properties": {
+    "name": "Walker Falls",
+    "address": "North Carolina 28709",
+    "rating": 4.4,
+    "reviews": 48,
+    "ptype": "Waterfall",
+    "place_id": "ChIJp_-67nwDWogR2pN8iFPcYK0"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.149143,
+     35.819919999999996
+    ]
+   },
+   "properties": {
+    "name": "Crabtree Falls",
+    "address": "RV92+X8, Burnsville, NC 28714",
+    "rating": 5,
+    "reviews": 7,
+    "ptype": "Hiking area",
+    "place_id": "ChIJV7POBQCpUIgRocGwVXlL9Sw"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.2047776,
+     35.8045079
+    ]
+   },
+   "properties": {
+    "name": "Carolina Hemlocks Recreation Area",
+    "address": "6000 NC-80, Burnsville, NC 28714",
+    "rating": 4.7,
+    "reviews": 444,
+    "ptype": "Campground",
+    "place_id": "ChIJzVN4rzqoUIgRRpY9gFfMIno"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -82.1359519,
+     35.8567868
+    ]
+   },
+   "properties": {
+    "name": "Crabtree Falls",
+    "address": "North Carolina 28777",
+    "rating": 4.1,
+    "reviews": 271,
+    "ptype": "Waterfall",
+    "place_id": "ChIJHfq6rHOmUIgRKsmsdkBKpXc"
+   }
+  }
+ ]
+}
